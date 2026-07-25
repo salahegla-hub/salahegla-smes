@@ -1,0 +1,211 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { useT, rel, LOCALES, type Locale } from '../../../i18n/ui';
+import { CATEGORY_LABELS } from '../../../content.config';
+import { getArticles } from '../../../lib/content';
+
+export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = useT(locale);
+const articles = await getArticles(locale, { section: 'readings' });
+
+/* Readings are published in Arabic only for now. Rather than 404 the English
+   route (the nav is shared across locales), render a short pointer instead. */
+const hasItems = articles.length > 0;
+const usedCats = [...new Set(articles.map((a) => a.data.category))];
+
+const L = { ar: 'قراءات نقدية', en: 'Critical readings' };
+const H1 = { ar: 'قراءات نقدية في أدبيات اقتصاد التنمية', en: 'Critical readings in the development economics literature' };
+const INTRO = {
+  ar: 'قراءات في أوراق ومقالات محكَّمة من أدبيات اقتصاد التنمية، تعرض حجّة كل ورقة ثم تناقشها نقديًا وتختبر حدود انتقالها إلى السياق العربي.',
+  en: 'Readings of peer-reviewed papers from the development economics literature, presenting each argument and then examining it critically against the Arab context.',
+};
+---
+<Base
+  locale={locale}
+  title={L[locale]}
+  description={INTRO[locale]}
+  path="readings"
+>
+  <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: L[locale] }]} /></div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="shead">
+        <span class="shead__eyebrow">{L[locale]}</span>
+        <h1>{H1[locale]}</h1>
+        <p>{INTRO[locale]}</p>
+      </div>
+
+      <!-- Section framing: states plainly what these are and what they are not. -->
+      <div class="about">
+        <h2 class="about__h">{locale === 'ar' ? 'عن هذا القسم' : 'About this section'}</h2>
+        {
+          locale === 'ar' ? (
+            <div class="about__b">
+              <p>
+                هذه القراءات ملاحظات بحثية على أوراق منشورة لباحثين آخرين، أُعدّت في إطار متابعة أدبيات
+                اقتصاد التنمية. كل قراءة تعرض حجّة الورقة الأصلية بصياغة خاصة، ثم تضيف مناقشة نقدية
+                تتناول ما تغفله الورقة وحدود انتقال نتائجها إلى الاقتصادات العربية والريعية.
+              </p>
+              <p>
+                هي ليست أوراقًا بحثية أصلية، ولا بديلًا عن قراءة النص الأصلي. لذلك يتصدّر كل قراءة
+                الاقتباس الكامل للورقة المقروءة، حتى يتمكّن القارئ من الرجوع إلى المصدر مباشرة.
+              </p>
+              <p class="about__n">
+                للأعمال البحثية الأصلية، انظر <a href={rel(locale, 'research')}>قسم الأوراق البحثية</a>؛
+                وللتحليلات المستقلة، انظر <a href={rel(locale, 'articles')}>قسم المقالات</a>.
+              </p>
+            </div>
+          ) : (
+            <div class="about__b">
+              <p>
+                These are research notes on published papers by other scholars, prepared while working
+                through the development economics literature. Each reading restates the original
+                argument in the author's own words, then adds a critical discussion of what the paper
+                leaves out and how far its findings travel to Arab and rentier economies.
+              </p>
+              <p>
+                They are not original research papers, nor a substitute for reading the source. Each
+                reading therefore opens with the full citation of the paper it discusses.
+              </p>
+              <p class="about__n">
+                For original research, see the <a href={rel(locale, 'research')}>research papers</a>;
+                for standalone analysis, see the <a href={rel(locale, 'articles')}>articles</a>.
+              </p>
+            </div>
+          )
+        }
+      </div>
+
+      {
+        hasItems ? (
+          <Fragment>
+            <div class="filters" role="search">
+              <div class="field filters__search">
+                <label for="q">{t('articles.searchLabel')}</label>
+                <input id="q" type="search" placeholder={t('articles.search')} autocomplete="off" />
+              </div>
+              <div class="field">
+                <label for="cat">{t('articles.filterCat')}</label>
+                <select id="cat">
+                  <option value="">{t('articles.all')}</option>
+                  {usedCats.map((c) => <option value={c}>{CATEGORY_LABELS[c][locale]}</option>)}
+                </select>
+              </div>
+              <button type="button" id="reset" class="btn btn--outline filters__reset">{t('articles.reset')}</button>
+            </div>
+
+            <p class="rescount" role="status" aria-live="polite"
+               data-one={t('articles.results')} data-many={t('articles.resultsPlural')}></p>
+
+            <div class="grid grid-3" id="alist">
+              {articles.map((a) => (
+                <div class="acell"
+                     data-cat={a.data.category}
+                     data-text={`${a.data.title} ${a.data.subtitle ?? ''} ${a.data.excerpt} ${a.data.tags.join(' ')}`.toLowerCase()}>
+                  <ArticleCard locale={locale} entry={a} />
+                </div>
+              ))}
+            </div>
+
+            <div class="empty" id="empty" hidden>
+              <strong>{locale === 'ar' ? 'لا توجد قراءات مطابقة' : 'No matching readings'}</strong>
+              <span>{t('articles.emptyHint')}</span>
+            </div>
+          </Fragment>
+        ) : (
+          <div class="empty">
+            <strong>
+              {locale === 'ar' ? 'لا توجد قراءات منشورة بعد' : 'These readings are published in Arabic'}
+            </strong>
+            <span>
+              {locale === 'ar'
+                ? 'سيُنشر هذا القسم قريبًا.'
+                : 'The critical readings are currently available in Arabic only.'}
+            </span>
+            {locale === 'en' && (
+              <p><a class="btn btn--outline" href="/ar/readings">اقرأها بالعربية</a></p>
+            )}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---- section framing panel ---- */
+  .about {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-inline-start: 3px solid var(--teal);
+    border-radius: var(--r);
+    padding: clamp(18px, 2.6vw, 26px);
+    margin-block-end: 22px;
+  }
+  .about__h {
+    font-size: 1.05rem;
+    margin: 0 0 10px;
+  }
+  .about__b p {
+    color: var(--text-3);
+    font-size: 0.95rem;
+    line-height: 1.9;
+    margin: 0 0 10px;
+    max-width: 78ch;
+  }
+  .about__b p:last-child { margin-block-end: 0 }
+  .about__n { font-size: 0.9rem }
+  .about__n a { color: var(--teal); font-weight: 600 }
+
+  /* ---- filters (matches the research section) ---- */
+  .filters { display: grid; grid-template-columns: 2fr 1fr auto; gap: 14px; align-items: end; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; margin-block-end: 22px }
+  .filters .field { margin-block-end: 0 }
+  .filters__reset { min-height: 48px; white-space: nowrap }
+  .rescount { color: var(--text-3); font-size: .9rem; margin-block-end: 18px }
+  .acell { display: contents }
+  .acell[hidden] { display: none }
+  @media (max-width: 860px) { .filters { grid-template-columns: 1fr 1fr } .filters__search { grid-column: 1 / -1 } .filters__reset { grid-column: 1 / -1 } }
+  @media (max-width: 520px) { .filters { grid-template-columns: 1fr } }
+</style>
+
+<script>
+  /* Guarded: on a locale with no readings the filter markup is not rendered. */
+  const q = document.getElementById('q') as HTMLInputElement | null;
+  const cat = document.getElementById('cat') as HTMLSelectElement | null;
+  const reset = document.getElementById('reset') as HTMLButtonElement | null;
+  const list = document.getElementById('alist');
+  const empty = document.getElementById('empty') as HTMLElement | null;
+  const count = document.querySelector('.rescount') as HTMLElement | null;
+
+  if (q && cat && reset && list && empty && count) {
+    const cells = Array.from(list.querySelectorAll<HTMLElement>('.acell'));
+
+    const apply = () => {
+      const term = q.value.trim().toLowerCase();
+      let shown = 0;
+      cells.forEach((c) => {
+        const ok =
+          (!term || (c.dataset.text || '').includes(term)) &&
+          (!cat.value || c.dataset.cat === cat.value);
+        c.hidden = !ok;
+        if (ok) shown++;
+      });
+      empty.hidden = shown !== 0;
+      count.textContent = `${shown} ${shown === 1 ? count.dataset.one : count.dataset.many}`;
+      const url = new URL(location.href);
+      cat.value ? url.searchParams.set('cat', cat.value) : url.searchParams.delete('cat');
+      history.replaceState(null, '', url);
+    };
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('cat')) cat.value = params.get('cat')!;
+
+    [q, cat].forEach((el) => el.addEventListener('input', apply));
+    reset.addEventListener('click', () => { q.value = ''; cat.value = ''; apply(); q.focus(); });
+    apply();
+  }
+</script>
