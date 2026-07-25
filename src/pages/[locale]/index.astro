@@ -4,7 +4,7 @@ import Icon from '../../components/Icon.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import Newsletter from '../../components/Newsletter.astro';
-import { useT, rel, LOCALES, SITE, type Locale } from '../../i18n/ui';
+import { useT, rel, fmtDate, LOCALES, SITE, type Locale } from '../../i18n/ui';
 import { getArticles, getProjects } from '../../lib/content';
 import { EXPERTISE, CREDENTIALS } from '../../data/profile';
 
@@ -25,13 +25,33 @@ const [researchPapers, generalArticles, projects] = await Promise.all([
   getProjects(locale),
 ]);
 
-const latest = [...researchPapers, ...generalArticles]
-  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-  .slice(0, 6);
+const merged = [...researchPapers, ...generalArticles].sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+
+/* The single newest item gets a pinned card; the rest fill the grid below. */
+const featured = merged[0];
+const latest = merged.slice(1, 7);
 
 const researchCount = researchPapers.length;
 const articlesCount = generalArticles.length;
 const topProjects = projects.slice(0, 2);
+
+/** Short type label for the pinned card, kept local so this page needs no extra imports. */
+function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): string {
+  if (data.peerReviewed) return locale === 'ar' ? 'محكَّم ومنشور' : 'Peer-reviewed';
+  const map: Record<string, { ar: string; en: string }> = {
+    article: { ar: 'مقال', en: 'Article' },
+    'research-paper': { ar: 'ورقة بحثية', en: 'Research paper' },
+    'working-paper': { ar: 'ورقة عمل', en: 'Working paper' },
+    'policy-brief': { ar: 'موجز تحليلي', en: 'Analytical brief' },
+    'economic-analysis': { ar: 'تحليل اقتصادي', en: 'Economic analysis' },
+    guide: { ar: 'دليل عملي', en: 'Guide' },
+    'case-study': { ar: 'دراسة حالة', en: 'Case study' },
+  };
+  const hit = data.contentType ? map[data.contentType] : undefined;
+  return hit ? hit[locale] : locale === 'ar' ? 'منشور' : 'Publication';
+}
 ---
 
 <Base
@@ -75,6 +95,30 @@ const topProjects = projects.slice(0, 2);
       </div>
     </div>
   </section>
+
+  <!-- ============ PINNED: newest publication, any type ============ -->
+  {
+    featured && (
+      <section class="section featsec">
+        <div class="wrap">
+          <a class="feat" href={rel(locale, `articles/${featured.data.slug}`)}>
+            <div class="feat__meta">
+              <span class="feat__flag">{locale === 'ar' ? 'آخر ما نُشر' : 'Latest'}</span>
+              <span class="feat__type">{typeLabel(featured.data)}</span>
+              <span class="feat__date">{fmtDate(featured.data.publishDate, locale)}</span>
+            </div>
+            <h2 class="feat__t">{featured.data.title}</h2>
+            {featured.data.subtitle && <p class="feat__sub">{featured.data.subtitle}</p>}
+            <p class="feat__x">{featured.data.excerpt}</p>
+            <span class="feat__cta">
+              {locale === 'ar' ? 'اقرأ كامل المنشور' : 'Read the full piece'}
+              <Icon name="arrow-right" />
+            </span>
+          </a>
+        </div>
+      </section>
+    )
+  }
 
   <!-- ===================== EXPERTISE ===================== -->
   <section class="section">
@@ -237,6 +281,91 @@ const topProjects = projects.slice(0, 2);
     border-radius: var(--r-lg);
     border: 1px solid rgba(196, 154, 69, 0.35);
     box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ---- pinned newest publication ---- */
+  .featsec {
+    padding-block-end: 0;
+  }
+  .feat {
+    display: block;
+    background: var(--surface, #fff);
+    border: 1px solid var(--line, rgba(20, 40, 60, 0.12));
+    border-inline-start: 4px solid var(--gold);
+    border-radius: var(--r-lg);
+    padding: clamp(22px, 3.2vw, 36px);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .feat:hover,
+  .feat:focus-visible {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+  .feat__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-block-end: 14px;
+  }
+  .feat__flag {
+    background: var(--gold-tint);
+    color: var(--gold-dark);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+  .feat__type {
+    background: var(--teal-tint);
+    color: var(--teal);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+  .feat__date {
+    color: var(--text-3);
+    font-size: 0.85rem;
+  }
+  .feat__t {
+    font-size: clamp(21px, 1.5vw + 15px, 31px);
+    line-height: 1.42;
+    margin: 0;
+    max-width: 44ch;
+  }
+  .feat__sub {
+    color: var(--text-3);
+    font-size: clamp(0.98rem, 0.25vw + 0.92rem, 1.08rem);
+    line-height: 1.72;
+    margin-block-start: 10px;
+    max-width: 62ch;
+  }
+  .feat__x {
+    font-size: 0.97rem;
+    line-height: 1.85;
+    margin-block-start: 14px;
+    max-width: 74ch;
+  }
+  .feat__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--teal);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-block-start: 18px;
+  }
+  .feat__cta :global(svg) {
+    width: 17px;
+    height: 17px;
+    stroke: currentColor;
+  }
+  [dir='rtl'] .feat__cta :global(svg) {
+    transform: scaleX(-1);
   }
 
   /* ---- expertise ---- */
