@@ -1,0 +1,171 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Icon from '../../components/Icon.astro';
+import { useT, rel, SITE, LOCALES, type Locale } from '../../i18n/ui';
+import { BIO, EXPERTISE, EXPERIENCE, EDUCATION, PUBLISHED, WORKING_PAPERS, CERTS, TOOLS, METHOD } from '../../data/profile';
+
+export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = useT(locale);
+const L = (b: { ar: string; en: string }) => b[locale];
+const name = locale === 'ar' ? SITE.nameAr : SITE.nameEn;
+---
+<Base locale={locale} title={`${t('about.title')} — ${name}`} description={t('about.desc')} path="about" ogType="profile">
+  <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.about') }]} /></div>
+
+  <section class="section ab-hero">
+    <div class="wrap ab-hero__in">
+      <div>
+        <span class="shead__eyebrow">{t('about.bio')}</span>
+        <h1>{name}</h1>
+        <p class="lead ab-bio">{L(BIO)}</p>
+        <div class="ab-links">
+          <a class="btn btn--gold" href="/files/Salaheldeen-Ijla-CV.pdf" download><Icon name="download" />{t('cv.download')}</a>
+          <a class="btn btn--primary" href={rel(locale, 'contact')}>{t('nav.cta')}</a>
+          <a class="btn btn--outline ltr" href={SITE.linkedin} target="_blank" rel="noopener noreferrer"><Icon name="linkedin" />LinkedIn</a>
+        </div>
+      </div>
+      <picture class="ab-photo">
+        <source srcset="/images/portrait-480.webp 480w, /images/portrait-720.webp 720w" sizes="240px" type="image/webp" />
+        <img src="/images/portrait-480.jpg" width="480" height="600" loading="lazy" decoding="async"
+             alt={locale === 'ar' ? `صورة شخصية لـ${SITE.nameAr}` : `Portrait of ${SITE.nameEn}`} />
+      </picture>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="shead"><h2>{t('about.expertise')}</h2></div>
+      <div class="grid grid-2">
+        {EXPERTISE.map((e) => (
+          <div class="card xcard">
+            <span class="xcard__ic"><Icon name={e.icon} /></span>
+            <div><h3>{L(e.title)}</h3><p>{L(e.text)}</p></div>
+          </div>
+        ))}
+      </div>
+      <div class="ab-tools">
+        <h3>{t('about.tools')}</h3>
+        <div class="ab-tools__row">{TOOLS.map((x) => <span class="pill ltr">{x}</span>)}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="shead"><h2>{t('about.experience')}</h2></div>
+      <ol class="tl">
+        {EXPERIENCE.map((r) => (
+          <li class="tl__i">
+            <span class="tl__p">{L(r.period)}</span>
+            <h3>{L(r.title)}</h3>
+            <p class="tl__o">{L(r.org)}</p>
+            <ul>{r.points.map((p) => <li>{L(p)}</li>)}</ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap ab-two">
+      <div>
+        <div class="shead"><h2>{t('about.education')}</h2></div>
+        <ol class="tl">
+          {EDUCATION.map((e) => (
+            <li class="tl__i">
+              <span class="tl__p">{L(e.period)}</span>
+              <h3>{L(e.degree)}</h3>
+              <p class="tl__o">{L(e.org)}</p>
+              {e.note && <p class="tl__n">{L(e.note)}</p>}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div>
+        <div class="shead"><h2>{t('about.certs')}</h2></div>
+        <ol class="tl">
+          {CERTS.map((c) => (
+            <li class="tl__i">
+              <span class="tl__p">{L(c.date)}</span>
+              <h3>{L(c.title)}</h3>
+              <p class="tl__o">{L(c.org)}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="shead"><h2>{t('about.publications')}</h2></div>
+      <h3 class="ab-sub">{t('about.published')}</h3>
+      <ul class="pub pub--main">
+        {PUBLISHED.map((p) => <li><strong>{L(p.title)}</strong><span>{L(p.where)}</span></li>)}
+      </ul>
+      <h3 class="ab-sub">{t('about.working')} <span class="pill pill--muted ltr">{WORKING_PAPERS.length}</span></h3>
+      <ul class="pub">
+        {WORKING_PAPERS.map((p) => <li><strong>{L(p.title)}</strong><span>{locale === 'ar' ? 'معهد الدوحة للدراسات العليا' : 'Doha Institute for Graduate Studies'} — {L(p.date)}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="shead"><h2>{t('about.method')}</h2></div>
+      <div class="grid grid-2">
+        {METHOD.map((m) => (
+          <div class="card"><h3>{L(m.title)}</h3><p>{L(m.text)}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap ab-cta">
+      <h2>{t('about.cta.h')}</h2>
+      <p>{t('about.cta.p')}</p>
+      <a class="btn btn--gold" href={rel(locale, 'contact')}>{t('nav.cta')}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ab-hero { padding-block-start: clamp(20px, 3vw, 32px) }
+  .ab-hero__in { display: grid; grid-template-columns: 1fr auto; gap: clamp(24px, 4vw, 48px); align-items: start }
+  .ab-hero h1 { margin-block: 8px 16px }
+  .ab-bio { max-width: 68ch; color: var(--text) }
+  .ab-links { display: flex; flex-wrap: wrap; gap: 11px; margin-block-start: 24px }
+  .ab-photo img { width: 220px; border-radius: var(--r); border: 1px solid var(--line) }
+  .xcard { flex-direction: row; gap: 16px; align-items: flex-start }
+  .xcard__ic { width: 46px; height: 46px; border-radius: 11px; background: var(--gold-tint); display: grid; place-items: center; flex: none }
+  .xcard__ic :global(svg) { width: 23px; height: 23px; stroke: var(--gold-dark) }
+  .ab-tools { margin-block-start: 28px }
+  .ab-tools h3 { font-size: 1rem; margin-block-end: 10px }
+  .ab-tools__row { display: flex; flex-wrap: wrap; gap: 8px }
+  .tl { list-style: none; display: flex; flex-direction: column; gap: 26px }
+  .tl__i { padding-inline-start: 20px; border-inline-start: 2px solid var(--line); position: relative }
+  .tl__i::before { content: ''; position: absolute; inset-block-start: 7px; inset-inline-start: -6px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold) }
+  .tl__p { display: block; color: var(--gold-dark); font-weight: 600; font-size: .85rem; margin-block-end: 5px }
+  .tl__i h3 { font-size: 1.05rem }
+  .tl__o { color: var(--text-3); font-size: .93rem; margin-block-start: 3px }
+  .tl__n { color: var(--text-3); font-size: .88rem; margin-block-start: 3px }
+  .tl__i ul { margin-block-start: 10px; padding-inline-start: 1.2em; color: var(--text-3); font-size: .92rem }
+  .tl__i ul li { margin-block-end: .4em }
+  .tl__i ul li::marker { color: var(--gold-dark) }
+  .ab-two { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(26px, 4vw, 52px); align-items: start }
+  .ab-sub { font-size: 1.05rem; margin-block: 26px 12px; display: flex; align-items: center; gap: 9px }
+  .ab-sub:first-of-type { margin-block-start: 0 }
+  .pub { list-style: none; display: flex; flex-direction: column; gap: 12px }
+  .pub li { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 14px 17px }
+  .pub li strong { display: block; color: var(--navy); font-weight: 600; font-size: .98rem; line-height: 1.6 }
+  .pub li span { display: block; color: var(--text-3); font-size: .86rem; margin-block-start: 5px }
+  .pub--main li { border-inline-start: 3px solid var(--gold) }
+  .ab-cta { text-align: center; background: var(--navy); border-radius: var(--r-lg); padding: clamp(30px, 4vw, 46px) }
+  .ab-cta h2 { color: #fff }
+  .ab-cta p { color: #B7C4D1; margin-block: 10px 22px; max-width: 56ch; margin-inline: auto }
+  @media (max-width: 900px) { .ab-hero__in { grid-template-columns: 1fr } .ab-photo { order: -1 } .ab-two { grid-template-columns: 1fr } }
+  @media (max-width: 560px) { .xcard { flex-direction: column } }
+</style>

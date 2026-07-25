@@ -1,0 +1,27 @@
+---
+import { rel, useT, type Locale } from '../i18n/ui';
+import { ENGAGEMENT_LABELS } from '../content.config';
+import type { Project } from '../lib/content';
+export interface Props { locale: Locale; entry: Project }
+const { locale, entry } = Astro.props;
+const t = useT(locale);
+const d = entry.data;
+---
+<a class="card pcard" href={rel(locale, `projects/${d.slug}`)}>
+  <div class="pcard__tags">
+    <span class="pill pill--muted">{ENGAGEMENT_LABELS[d.engagement][locale]}</span>
+    <span class="pill">{d.sector}</span>
+  </div>
+  <h3>{d.title}</h3>
+  <p>{d.summary}</p>
+  <span class="card__foot pcard__go">
+    {t('projects.view')}
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 5l7 7-7 7"/><path d="M21 12H3"/></svg>
+  </span>
+</a>
+<style>
+  .pcard__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-block-end: 12px }
+  .pcard__go { display: inline-flex; align-items: center; gap: 7px; color: var(--teal-dark); font-weight: 600; font-size: .92rem }
+  .pcard__go svg { width: 16px; height: 16px }
+  :global([dir='rtl']) .pcard__go svg { transform: scaleX(-1) }
+</style>

@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import Icon from '../../components/Icon.astro';
+import { useT, rel, SITE, LOCALES, type Locale } from '../../i18n/ui';
+
+export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = useT(locale);
+---
+<Base locale={locale} title={`${t('contact.title')} — ${locale === 'ar' ? SITE.nameAr : SITE.nameEn}`} description={t('contact.desc')} path="contact">
+  <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.contact') }]} /></div>
+
+  <section class="section">
+    <div class="wrap ct">
+      <div class="ct__side">
+        <div class="shead">
+          <span class="shead__eyebrow">{t('nav.contact')}</span>
+          <h1>{t('contact.h1')}</h1>
+          <p>{t('contact.intro')}</p>
+        </div>
+        <h2 class="ct__h">{t('contact.direct')}</h2>
+        <ul class="ct__list">
+          <li><span class="ct__ic"><Icon name="mail" /></span><a class="ltr" href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li><span class="ct__ic"><Icon name="phone" /></span><a class="ltr" href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></li>
+          <li><span class="ct__ic"><Icon name="linkedin" /></span><a class="ltr" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedinLabel}</a></li>
+          <li><span class="ct__ic"><Icon name="pin" /></span><span>{locale === 'ar' ? SITE.cityAr : SITE.cityEn}</span></li>
+        </ul>
+        <p class="notice notice--info ct__pv">
+          {locale === 'ar'
+            ? 'تُستخدم بياناتك للردّ على طلبك فقط، ولا تُشارَك مع أي طرف ثالث.'
+            : 'Your details are used only to respond to your request and are not shared with any third party.'}
+          {' '}<a href={rel(locale, 'privacy')}>{t('foot.privacy')}</a>
+        </p>
+      </div>
+      <div class="ct__form card">
+        <ContactForm locale={locale} />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ct { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(26px, 4vw, 52px); align-items: start }
+  .ct__h { font-size: 1rem; margin-block-end: 12px }
+  .ct__list { list-style: none; display: flex; flex-direction: column; gap: 12px }
+  .ct__list li { display: flex; align-items: center; gap: 12px }
+  .ct__list a { text-decoration: none; font-size: .96rem }
+  .ct__list a:hover { text-decoration: underline }
+  .ct__ic { width: 40px; height: 40px; border-radius: 10px; background: var(--teal-tint); display: grid; place-items: center; flex: none }
+  .ct__ic :global(svg) { width: 19px; height: 19px; stroke: var(--teal) }
+  .ct__pv { margin-block-start: 24px; font-size: .89rem }
+  .ct__form { padding: clamp(22px, 3vw, 34px) }
+  @media (max-width: 940px) { .ct { grid-template-columns: 1fr } }
+</style>

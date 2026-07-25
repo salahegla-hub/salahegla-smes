@@ -1,0 +1,5 @@
+---
+// Root: send visitors to the default language. netlify.toml also does this
+// with a 301 at the edge; this file covers direct static hosting.
+return Astro.redirect('/ar/', 301);
+---

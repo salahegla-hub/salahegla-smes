@@ -1,0 +1,34 @@
+---
+import { rel, useT, SITE, type Locale } from '../i18n/ui';
+export interface Props { locale: Locale; items: { label: string; href?: string }[] }
+const { locale, items } = Astro.props;
+const t = useT(locale);
+const all = [{ label: t('crumb.home'), href: rel(locale) }, ...items];
+const ld = {
+  '@type': 'BreadcrumbList',
+  itemListElement: all.map((it, i) => ({
+    '@type': 'ListItem', position: i + 1, name: it.label,
+    ...(it.href ? { item: new URL(it.href, SITE.url).href } : {}),
+  })),
+};
+---
+<nav class="breadcrumbs" aria-label="breadcrumb">
+  <ol>
+    {all.map((it, i) => (
+      <li>
+        {it.href && i < all.length - 1 ? <a href={it.href}>{it.label}</a> : <span aria-current="page">{it.label}</span>}
+        {i < all.length - 1 && <span class="sep" aria-hidden="true">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(ld)} is:inline />
+<style>
+  .breadcrumbs { padding-block: 14px 0 }
+  .breadcrumbs ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: .86rem; color: var(--text-3) }
+  .breadcrumbs li { display: inline-flex; align-items: center; gap: 6px }
+  .breadcrumbs a { color: var(--text-3); text-decoration: none }
+  .breadcrumbs a:hover { color: var(--teal); text-decoration: underline }
+  .breadcrumbs .sep { color: #B9C2C8 }
+  .breadcrumbs [aria-current] { color: var(--navy); font-weight: 500 }
+</style>

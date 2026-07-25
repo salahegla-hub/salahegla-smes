@@ -1,0 +1,251 @@
+---
+import { useT, type Locale } from '../i18n/ui';
+
+export interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useT(locale);
+const ar = locale === 'ar';
+
+const sectors = ar
+  ? ['التجارة والتجزئة', 'الصناعة والتصنيع', 'الخدمات المهنية', 'التقنية', 'الزراعة والأغذية', 'العقارات والإنشاءات', 'السياحة والضيافة', 'التعليم', 'الصحة', 'الطاقة', 'القطاع العام', 'منظمات غير ربحية', 'أخرى']
+  : ['Trade & retail', 'Manufacturing', 'Professional services', 'Technology', 'Agriculture & food', 'Real estate & construction', 'Tourism & hospitality', 'Education', 'Health', 'Energy', 'Public sector', 'Non-profit', 'Other'];
+
+const stages = ar
+  ? ['فكرة أوّلية', 'قيد الدراسة', 'قيد التأسيس', 'قائم ويسعى للتوسّع', 'قائم ويواجه تعثّرًا', 'أخرى']
+  : ['Early idea', 'Under study', 'Being set up', 'Operating and expanding', 'Operating with difficulties', 'Other'];
+
+const timeframes = ar
+  ? ['عاجل (خلال أسبوعين)', 'خلال شهر', 'خلال ثلاثة أشهر', 'غير محدّد بعد']
+  : ['Urgent (within two weeks)', 'Within a month', 'Within three months', 'Not defined yet'];
+
+const channels = ar ? ['البريد الإلكتروني', 'الهاتف', 'واتساب', 'اجتماع مرئي'] : ['Email', 'Phone', 'WhatsApp', 'Video call'];
+
+const subjects = ar
+  ? ['تعاون بحثي', 'استفسار عن ورقة بحثية', 'مناقشة أكاديمية', 'دعوة لفعالية أو ورشة', 'استفسار إعلامي', 'أخرى']
+  : ['Research collaboration', 'Question about a paper', 'Academic discussion', 'Event or workshop invitation', 'Media enquiry', 'Other'];
+---
+
+<form
+  class="cform"
+  id="contact-form"
+  name="contact"
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="company-website"
+  novalidate
+  data-msg-required={t('contact.reqField')}
+  data-msg-email={t('contact.reqEmail')}
+  data-msg-consent={t('contact.reqConsent')}
+  data-msg-sending={t('contact.sending')}
+  data-msg-success={t('contact.success')}
+  data-msg-error={t('contact.error')}
+  data-submit-label={t('contact.submit')}
+>
+  <input type="hidden" name="form-name" value="contact" />
+  <input type="hidden" name="locale" value={locale} />
+  <p class="hp" aria-hidden="true">
+    <label>Do not fill this in<input name="company-website" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div class="cform__grid">
+    <div class="field">
+      <label for="f-name">{t('contact.name')}</label>
+      <input id="f-name" name="name" type="text" required autocomplete="name" />
+      <p class="err" data-err-for="f-name" hidden></p>
+    </div>
+
+    <div class="field">
+      <label for="f-email">{t('contact.email')}</label>
+      <input id="f-email" name="email" type="email" required autocomplete="email" inputmode="email" dir="ltr" />
+      <p class="err" data-err-for="f-email" hidden></p>
+    </div>
+
+    <div class="field">
+      <label for="f-phone">{t('contact.phone')} <span class="hint">({t('contact.optional')})</span></label>
+      <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" dir="ltr" />
+    </div>
+
+    <div class="field">
+      <label for="f-org">{t('contact.org')} <span class="hint">({t('contact.optional')})</span></label>
+      <input id="f-org" name="organization" type="text" autocomplete="organization" />
+    </div>
+
+    <div class="field">
+      <label for="f-country">{t('contact.country')}</label>
+      <input id="f-country" name="country" type="text" required autocomplete="country-name" />
+      <p class="err" data-err-for="f-country" hidden></p>
+    </div>
+
+    <div class="field">
+      <label for="f-lang">{t('contact.prefLang')}</label>
+      <select id="f-lang" name="preferredLanguage">
+        <option value="ar">{ar ? 'العربية' : 'Arabic'}</option>
+        <option value="en" selected={locale === 'en'}>{ar ? 'الإنجليزية' : 'English'}</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="f-service">{t('contact.subject')}</label>
+      <select id="f-service" name="subject" required>
+        <option value="">{t('contact.choose')}</option>
+        {subjects.map((x) => <option value={x}>{x}</option>)}
+      </select>
+      <p class="err" data-err-for="f-service" hidden></p>
+    </div>
+
+    <div class="field">
+      <label for="f-sector">{t('contact.sector')}</label>
+      <select id="f-sector" name="sector">
+        <option value="">{t('contact.choose')}</option>
+        {sectors.map((s) => <option value={s}>{s}</option>)}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="f-time">{t('contact.timeframe')}</label>
+      <select id="f-time" name="timeframe">
+        <option value="">{t('contact.choose')}</option>
+        {timeframes.map((s) => <option value={s}>{s}</option>)}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="f-channel">{t('contact.channel')}</label>
+      <select id="f-channel" name="channel">
+        {channels.map((s) => <option value={s}>{s}</option>)}
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="f-details">{t('contact.details')}</label>
+    <textarea id="f-details" name="details" required></textarea>
+    <p class="err" data-err-for="f-details" hidden></p>
+  </div>
+
+  <div class="field field--check">
+    <input id="f-consent" name="consent" type="checkbox" required value="yes" />
+    <label for="f-consent">{t('contact.consent')}</label>
+  </div>
+  <p class="err" data-err-for="f-consent" hidden></p>
+
+  <button type="submit" class="btn btn--gold cform__submit">{t('contact.submit')}</button>
+
+  <p class="cform__status" role="status" aria-live="polite" hidden></p>
+</form>
+
+<style>
+  .cform__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 18px;
+  }
+  .cform__submit {
+    width: 100%;
+    margin-block-start: 8px;
+  }
+  .cform__status {
+    margin-block-start: 16px;
+    padding: 14px 16px;
+    border-radius: var(--r-sm);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .cform__status[data-state='ok'] {
+    background: var(--teal-tint);
+    color: #17454E;
+    border: 1px solid #C3D9DD;
+  }
+  .cform__status[data-state='bad'] {
+    background: #FBEDEA;
+    color: #8C2818;
+    border: 1px solid #EDCFC8;
+  }
+  @media (max-width: 640px) {
+    .cform__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    const d = form.dataset;
+    const status = form.querySelector('.cform__status') as HTMLElement;
+    const submit = form.querySelector('.cform__submit') as HTMLButtonElement;
+
+    const showErr = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, msg: string | null) => {
+      const box = form.querySelector(`[data-err-for="${el.id}"]`) as HTMLElement | null;
+      el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (!box) return;
+      if (msg) {
+        box.textContent = msg;
+        box.hidden = false;
+        el.setAttribute('aria-describedby', box.getAttribute('id') || (box.id = `${el.id}-err`));
+      } else {
+        box.hidden = true;
+      }
+    };
+
+    const validate = (el: any): boolean => {
+      if (el.type === 'checkbox') {
+        const ok = el.checked;
+        showErr(el, ok ? null : d.msgConsent!);
+        return ok;
+      }
+      if (!el.required) return true;
+      if (!el.value.trim()) {
+        showErr(el, d.msgRequired!);
+        return false;
+      }
+      if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(el.value.trim())) {
+        showErr(el, d.msgEmail!);
+        return false;
+      }
+      showErr(el, null);
+      return true;
+    };
+
+    form.querySelectorAll<HTMLElement>('input,select,textarea').forEach((el: any) => {
+      if (el.name === 'company-website') return;
+      el.addEventListener('blur', () => validate(el));
+      el.addEventListener('input', () => el.getAttribute('aria-invalid') === 'true' && validate(el));
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fields = Array.from(form.querySelectorAll<HTMLElement>('[required]')) as any[];
+      const bad = fields.filter((el) => !validate(el));
+      if (bad.length) {
+        bad[0].focus();
+        status.hidden = false;
+        status.dataset.state = 'bad';
+        status.textContent = d.msgRequired!;
+        return;
+      }
+      submit.disabled = true;
+      submit.textContent = d.msgSending!;
+      status.hidden = true;
+      try {
+        const body = new URLSearchParams(new FormData(form) as any).toString();
+        const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.dataset.state = 'ok';
+        status.textContent = d.msgSuccess!;
+        status.hidden = false;
+        status.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      } catch {
+        status.dataset.state = 'bad';
+        status.textContent = d.msgError!;
+        status.hidden = false;
+      } finally {
+        submit.disabled = false;
+        submit.textContent = d.submitLabel!;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,140 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { DIR, HTML_LANG, OG_LOCALE, SITE, useT, otherLocale, type Locale } from '../i18n/ui';
+
+export interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Path of this page WITHOUT locale prefix, e.g. 'about' or 'articles/my-slug' */
+  path?: string;
+  /** Same page in the other language, without locale prefix. null = no translation. */
+  altPath?: string | null;
+  canonical?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  ogImage?: string;
+  noindex?: boolean;
+  /** Extra JSON-LD graph nodes for this page. */
+  schema?: Record<string, any>[];
+  bodyClass?: string;
+}
+
+const {
+  locale,
+  title,
+  description,
+  path = '',
+  altPath,
+  canonical,
+  ogType = 'website',
+  ogImage = '/images/og-default.png',
+  noindex = false,
+  schema = [],
+  bodyClass = '',
+} = Astro.props;
+
+const t = useT(locale);
+const other = otherLocale(locale);
+const clean = (p: string) => p.replace(/^\/+|\/+$/g, '');
+
+const selfUrl = new URL(`/${locale}/${clean(path)}`.replace(/\/$/, '') + (clean(path) ? '' : '/'), SITE.url).href;
+const canonicalUrl = canonical ?? selfUrl;
+// altPath === undefined -> mirror the same path; null -> no translation exists
+const altUrl =
+  altPath === null ? null : new URL(`/${other}/${clean(altPath ?? path)}`.replace(/\/$/, '') + (clean(altPath ?? path) ? '' : '/'), SITE.url).href;
+
+const fullName = locale === 'ar' ? SITE.nameAr : SITE.nameEn;
+const ogImageUrl = new URL(ogImage, SITE.url).href;
+
+/* ---- Structured data: Person + WebSite always present (brief §17) ---- */
+const personNode = {
+  '@type': 'Person',
+  '@id': `${SITE.url}/#person`,
+  name: fullName,
+  alternateName: locale === 'ar' ? SITE.nameEn : SITE.nameAr,
+  url: SITE.url,
+  email: `mailto:${SITE.email}`,
+  telephone: SITE.phoneHref,
+  jobTitle: locale === 'ar' ? 'باحث اقتصادي' : 'Economic Researcher',
+  address: { '@type': 'PostalAddress', addressLocality: locale === 'ar' ? 'الدوحة' : 'Doha', addressCountry: 'QA' },
+  sameAs: [SITE.linkedin],
+  knowsAbout:
+    locale === 'ar'
+      ? ['اقتصاديات التنمية', 'تمويل المنشآت الصغيرة والمتوسطة', 'دراسات الجدوى', 'التحليل المالي', 'التحليل الائتماني', 'السياسات العامة']
+      : ['Development economics', 'SME finance', 'Feasibility studies', 'Financial analysis', 'Credit analysis', 'Public policy'],
+};
+
+const websiteNode = {
+  '@type': 'WebSite',
+  '@id': `${SITE.url}/#website`,
+  url: SITE.url,
+  name: fullName,
+  inLanguage: HTML_LANG[locale],
+  publisher: { '@id': `${SITE.url}/#person` },
+};
+
+const jsonLd = { '@context': 'https://schema.org', '@graph': [personNode, websiteNode, ...schema] };
+---
+
+<!doctype html>
+<html lang={HTML_LANG[locale]} dir={DIR[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+
+    <!-- hreflang -->
+    <link rel="alternate" hreflang={locale} href={selfUrl} />
+    {altUrl && <link rel="alternate" hreflang={other} href={altUrl} />}
+    <link rel="alternate" hreflang="x-default" href={locale === 'ar' ? selfUrl : (altUrl ?? selfUrl)} />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={fullName} />
+    <meta property="og:locale" content={OG_LOCALE[locale]} />
+    {altUrl && <meta property="og:locale:alternate" content={OG_LOCALE[other]} />}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <meta name="author" content={fullName} />
+    <meta name="theme-color" content="#0B1F33" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={locale === 'ar' ? 'الأبحاث والمقالات — RSS' : 'Research & Articles — RSS'}
+      href={`/${locale}/rss.xml`}
+    />
+
+    <!-- Preload the two most-used font weights to avoid a flash of fallback text -->
+    <link rel="preload" as="font" type="font/woff2" href={locale === 'ar' ? '/fonts/tajawal-400.woff2' : '/fonts/plex-en-400.woff2'} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={locale === 'ar' ? '/fonts/tajawal-700.woff2' : '/fonts/plex-en-700.woff2'} crossorigin />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%230B1F33'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='31' font-weight='700' fill='%23C49A45' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+  </head>
+
+  <body class={bodyClass}>
+    <a class="skip" href="#main">{t('nav.skip')}</a>
+    <Header locale={locale} path={path} altPath={altPath} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

@@ -1,0 +1,129 @@
+---
+import { useT, rel, SITE, type Locale } from '../i18n/ui';
+export interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useT(locale);
+const year = new Date().getFullYear();
+const nav = [
+  { key: 'nav.about', to: 'about' },
+  { key: 'nav.research', to: 'research' },
+  { key: 'nav.articles', to: 'articles' },
+  { key: 'nav.projects', to: 'projects' },
+  { key: 'nav.contact', to: 'contact' },
+] as const;
+---
+
+<footer class="site-footer">
+  <div class="wrap ft">
+    <div class="ft__brand">
+      <span class="ft__name">{locale === 'ar' ? SITE.nameAr : SITE.nameEn}</span>
+      <span class="ft__sub">{SITE.tagEn}</span>
+      <p class="ft__note">{t('foot.legalNote')}</p>
+    </div>
+
+    <nav class="ft__col" aria-label={t('foot.nav')}>
+      <h2 class="ft__h">{t('foot.nav')}</h2>
+      {nav.map((n) => <a href={rel(locale, n.to)}>{t(n.key)}</a>)}
+      <a href={rel(locale, 'privacy')}>{t('foot.privacy')}</a>
+      <a href={`/${locale}/rss.xml`} class="ltr">RSS</a>
+    </nav>
+
+    <div class="ft__col">
+      <h2 class="ft__h">{t('foot.contact')}</h2>
+      <a href={`mailto:${SITE.email}`} class="ltr">{SITE.email}</a>
+      <a href={`tel:${SITE.phoneHref}`} class="ltr">{SITE.phone}</a>
+      <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" class="ltr">{SITE.linkedinLabel}</a>
+      <span class="ft__city">{locale === 'ar' ? SITE.cityAr : SITE.cityEn}</span>
+    </div>
+  </div>
+
+  <div class="wrap ft__bar">
+    <span>© {year} {locale === 'ar' ? SITE.nameAr : SITE.nameEn} — {t('foot.rights')}</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--navy);
+    color: #B8C4CF;
+    margin-block-start: auto;
+  }
+  .ft {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: clamp(26px, 4vw, 52px);
+    padding-block: clamp(40px, 5vw, 60px) 30px;
+  }
+  .ft__name {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.16rem;
+  }
+  .ft__sub {
+    display: block;
+    color: var(--gold);
+    font-family: var(--font-en);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    margin-block-start: 4px;
+  }
+  .ft__note {
+    color: #93A2B0;
+    font-size: 0.86rem;
+    line-height: 1.8;
+    margin-block-start: 14px;
+    max-width: 46ch;
+  }
+  .ft__col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ft__h {
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-block-end: 4px;
+  }
+  .ft__col a {
+    color: #B8C4CF;
+    text-decoration: none;
+    font-size: 0.93rem;
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+  }
+  .ft__col a:hover {
+    color: var(--gold);
+    text-decoration: underline;
+  }
+  .ft__city {
+    font-size: 0.93rem;
+    color: #93A2B0;
+  }
+  .ft__bar {
+    border-block-start: 1px solid rgba(255, 255, 255, 0.1);
+    padding-block: 18px 22px;
+    font-size: 0.85rem;
+    color: #8A99A7;
+  }
+  @media (max-width: 860px) {
+    .ft {
+      grid-template-columns: 1fr 1fr;
+    }
+    .ft__brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 480px) {
+    .ft {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

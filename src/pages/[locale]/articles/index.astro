@@ -1,0 +1,119 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { useT, LOCALES, type Locale } from '../../../i18n/ui';
+import { CATEGORY_LABELS, TYPE_LABELS } from '../../../content.config';
+import { getArticles } from '../../../lib/content';
+
+export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = useT(locale);
+const articles = await getArticles(locale, { section: 'articles' });
+
+const usedCats = [...new Set(articles.map((a) => a.data.category))];
+const usedTypes = [...new Set(articles.map((a) => a.data.contentType))];
+---
+<Base locale={locale} title={t('articles.title')} description={t('articles.desc')} path="articles">
+  <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.articles') }]} /></div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="shead">
+        <span class="shead__eyebrow">{t('nav.articles')}</span>
+        <h1>{t('articles.h1')}</h1>
+        <p>{t('articles.intro')}</p>
+      </div>
+
+      <div class="filters" role="search">
+        <div class="field filters__search">
+          <label for="q">{t('articles.searchLabel')}</label>
+          <input id="q" type="search" placeholder={t('articles.search')} autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="cat">{t('articles.filterCat')}</label>
+          <select id="cat">
+            <option value="">{t('articles.all')}</option>
+            {usedCats.map((c) => <option value={c}>{CATEGORY_LABELS[c][locale]}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for="type">{t('articles.filterType')}</label>
+          <select id="type">
+            <option value="">{t('articles.all')}</option>
+            {usedTypes.map((c) => <option value={c}>{TYPE_LABELS[c][locale]}</option>)}
+          </select>
+        </div>
+        <button type="button" id="reset" class="btn btn--outline filters__reset">{t('articles.reset')}</button>
+      </div>
+
+      <p class="rescount" role="status" aria-live="polite"
+         data-one={t('articles.results')} data-many={t('articles.resultsPlural')}></p>
+
+      <div class="grid grid-3" id="alist">
+        {articles.map((a) => (
+          <div class="acell"
+               data-cat={a.data.category}
+               data-type={a.data.contentType}
+               data-text={`${a.data.title} ${a.data.subtitle ?? ''} ${a.data.excerpt} ${a.data.tags.join(' ')}`.toLowerCase()}>
+            <ArticleCard locale={locale} entry={a} />
+          </div>
+        ))}
+      </div>
+
+      <div class="empty" id="empty" hidden>
+        <strong>{t('articles.empty')}</strong>
+        <span>{t('articles.emptyHint')}</span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filters { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 14px; align-items: end; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; margin-block-end: 22px }
+  .filters .field { margin-block-end: 0 }
+  .filters__reset { min-height: 48px; white-space: nowrap }
+  .rescount { color: var(--text-3); font-size: .9rem; margin-block-end: 18px }
+  .acell { display: contents }
+  .acell[hidden] { display: none }
+  @media (max-width: 860px) { .filters { grid-template-columns: 1fr 1fr } .filters__search { grid-column: 1 / -1 } .filters__reset { grid-column: 1 / -1 } }
+  @media (max-width: 520px) { .filters { grid-template-columns: 1fr } }
+</style>
+
+<script>
+  const q = document.getElementById('q') as HTMLInputElement;
+  const cat = document.getElementById('cat') as HTMLSelectElement;
+  const type = document.getElementById('type') as HTMLSelectElement;
+  const reset = document.getElementById('reset') as HTMLButtonElement;
+  const list = document.getElementById('alist')!;
+  const empty = document.getElementById('empty') as HTMLElement;
+  const count = document.querySelector('.rescount') as HTMLElement;
+  const cells = Array.from(list.querySelectorAll<HTMLElement>('.acell'));
+
+  function apply() {
+    const term = q.value.trim().toLowerCase();
+    let shown = 0;
+    cells.forEach((c) => {
+      const ok =
+        (!term || (c.dataset.text || '').includes(term)) &&
+        (!cat.value || c.dataset.cat === cat.value) &&
+        (!type.value || c.dataset.type === type.value);
+      c.hidden = !ok;
+      if (ok) shown++;
+    });
+    empty.hidden = shown !== 0;
+    count.textContent = `${shown} ${shown === 1 ? count.dataset.one : count.dataset.many}`;
+    const url = new URL(location.href);
+    cat.value ? url.searchParams.set('cat', cat.value) : url.searchParams.delete('cat');
+    type.value ? url.searchParams.set('type', type.value) : url.searchParams.delete('type');
+    history.replaceState(null, '', url);
+  }
+
+  const params = new URLSearchParams(location.search);
+  if (params.get('cat')) cat.value = params.get('cat')!;
+  if (params.get('type')) type.value = params.get('type')!;
+
+  [q, cat, type].forEach((el) => el.addEventListener('input', apply));
+  reset.addEventListener('click', () => { q.value = ''; cat.value = ''; type.value = ''; apply(); q.focus(); });
+  apply();
+</script>

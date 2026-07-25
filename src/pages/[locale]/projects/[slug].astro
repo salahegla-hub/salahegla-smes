@@ -1,0 +1,100 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import '../../../styles/prose.css';
+import { useT, rel, type Locale } from '../../../i18n/ui';
+import { ENGAGEMENT_LABELS } from '../../../content.config';
+import { translatedSlug } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const all = await getCollection('projects', ({ data }) => data.status === 'published');
+  return all.map((entry) => ({ params: { locale: entry.data.locale, slug: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const locale = entry.data.locale as Locale;
+const t = useT(locale);
+const d = entry.data;
+const { Content } = await render(entry);
+const altSlug = await translatedSlug('projects', d.translationKey, locale === 'ar' ? 'en' : 'ar');
+
+const blocks = [
+  { key: 'projects.methodology', items: d.methodology },
+  { key: 'projects.scope', items: d.scope },
+  { key: 'projects.deliverables', items: d.deliverables },
+  { key: 'projects.tools', items: d.tools },
+].filter((b) => b.items.length);
+---
+<Base
+  locale={locale}
+  title={`${d.title} — ${t('projects.h1')}`}
+  description={d.seoDescription ?? d.summary}
+  path={`projects/${d.slug}`}
+  altPath={altSlug ? `projects/${altSlug}` : null}
+  canonical={d.canonicalUrl}
+>
+  <div class="wrap">
+    <Breadcrumbs locale={locale} items={[{ label: t('nav.projects'), href: rel(locale, 'projects') }, { label: d.title }]} />
+  </div>
+
+  <section class="section p-hero">
+    <div class="wrap">
+      <div class="p-hero__tags">
+        <span class="pill pill--gold">{ENGAGEMENT_LABELS[d.engagement][locale]}</span>
+        <span class="pill">{d.sector}</span>
+        <span class="pill pill--muted">{d.projectType}</span>
+      </div>
+      <h1>{d.title}</h1>
+      <p class="lead">{d.summary}</p>
+    </div>
+  </section>
+
+  <section class="wrap p-body">
+    <div class="prose"><Content /></div>
+
+    {d.question && (
+      <div class="p-q">
+        <h2>{t('projects.question')}</h2>
+        <p>{d.question}</p>
+      </div>
+    )}
+
+    <div class="p-blocks">
+      {blocks.map((b) => (
+        <section class="card">
+          <h2>{t(b.key as any)}</h2>
+          <ul>{b.items.map((i: string) => <li>{i}</li>)}</ul>
+        </section>
+      ))}
+    </div>
+
+    {d.value && (
+      <div class="notice notice--info p-val">
+        <strong>{t('projects.value')}:</strong> {d.value}
+      </div>
+    )}
+
+    <p class="p-cta"><a class="btn btn--gold" href={rel(locale, 'contact')}>{t('nav.cta')}</a></p>
+  </section>
+</Base>
+
+<style>
+  .p-hero { background: var(--card); border-block-end: 1px solid var(--line); padding-block: clamp(30px, 4vw, 48px) }
+  .p-hero__tags { display: flex; flex-wrap: wrap; gap: 7px; margin-block-end: 14px }
+  .p-hero h1 { max-width: 24ch }
+  .p-hero .lead { max-width: 64ch; margin-block-start: 12px }
+  .p-body { padding-block: clamp(32px, 5vw, 52px) }
+  .p-q { background: var(--gold-tint); border-radius: var(--r); padding: 22px 24px; margin-block-start: 32px }
+  .p-q h2 { font-size: 1.02rem; margin-block-end: 8px }
+  .p-q p { color: #5C4A22; font-size: 1.02rem }
+  .p-blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-block-start: 24px }
+  .p-blocks h2 { font-size: 1.04rem; margin-block-end: 11px }
+  .p-blocks ul { padding-inline-start: 1.2em; color: var(--text-3); font-size: .94rem }
+  .p-blocks li { margin-block-end: .5em }
+  .p-blocks li::marker { color: var(--gold-dark) }
+  .p-val { margin-block-start: 26px }
+  .p-rel { margin-block-start: 46px }
+  .p-rel h2 { margin-block-end: 18px }
+  .p-cta { margin-block-start: 40px }
+</style>

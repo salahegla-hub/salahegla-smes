@@ -1,0 +1,25 @@
+---
+import { useT, type Locale } from '../i18n/ui';
+export interface Props { locale: Locale; headings: { depth: number; slug: string; text: string }[] }
+const { locale, headings } = Astro.props;
+const t = useT(locale);
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{items.length >= 3 && (
+  <nav class="toc" aria-labelledby="toc-h">
+    <h2 class="toc__h" id="toc-h">{t('articles.toc')}</h2>
+    <ol>
+      {items.map((h) => (
+        <li class:list={[`d${h.depth}`]}><a href={`#${h.slug}`}>{h.text}</a></li>
+      ))}
+    </ol>
+  </nav>
+)}
+<style>
+  .toc { background: var(--card); border: 1px solid var(--line); border-inline-start: 3px solid var(--gold); border-radius: var(--r-sm); padding: 20px 22px; margin-block-end: 32px }
+  .toc__h { font-size: .95rem; font-weight: 600; color: var(--navy); margin-block-end: 12px; letter-spacing: .02em }
+  .toc ol { list-style: none; counter-reset: toc; display: flex; flex-direction: column; gap: 2px }
+  .toc li.d3 { padding-inline-start: 18px }
+  .toc a { display: block; padding: 6px 4px; color: var(--text-3); text-decoration: none; font-size: .92rem; line-height: 1.6; border-radius: 4px }
+  .toc a:hover { color: var(--teal-dark); background: var(--teal-tint) }
+</style>

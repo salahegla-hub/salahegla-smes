@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import '../../styles/prose.css';
+import { useT, SITE, LOCALES, type Locale } from '../../i18n/ui';
+
+export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = useT(locale);
+const ar = locale === 'ar';
+---
+<Base locale={locale} title={`${t('privacy.title')} — ${ar ? SITE.nameAr : SITE.nameEn}`} description={ar ? 'كيف تُجمع بياناتك وتُستخدم على هذا الموقع.' : 'How your data is collected and used on this site.'} path="privacy">
+  <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('privacy.title') }]} /></div>
+  <section class="section">
+    <div class="wrap">
+      <h1>{t('privacy.title')}</h1>
+      <div class="prose" style="margin-block-start:22px">
+        {ar ? (
+          <Fragment>
+            <h2>ما الذي يُجمع</h2>
+            <p>لا يُجمع من زوّار هذا الموقع أي بيانات شخصية إلا ما تُدخله بنفسك في نموذج التواصل أو نموذج النشرة البريدية: الاسم، والبريد الإلكتروني، والهاتف (اختياري)، والجهة (اختياري)، والدولة، وتفاصيل طلبك.</p>
+            <h2>كيف تُستخدم</h2>
+            <p>تُستخدم هذه البيانات لغرض واحد: الردّ على طلبك أو إرسال النشرة التي اشتركت فيها. ولا تُباع ولا تُؤجَّر ولا تُشارَك مع أي طرف ثالث لأغراض تسويقية.</p>
+            <h2>أين تُحفظ</h2>
+            <p>يُستضاف الموقع على منصة Netlify، وتُخزَّن رسائل النماذج ضمن خدمة النماذج الخاصة بها. ويخضع ذلك لسياسة الخصوصية الخاصة بالمنصة إضافةً إلى هذه السياسة.</p>
+            <h2>ملفات تعريف الارتباط والتتبّع</h2>
+            <p>لا يستخدم هذا الموقع ملفات تعريف ارتباط للتتبّع، ولا أدوات تحليلات، ولا أي نصوص برمجية لأطراف ثالثة لأغراض إعلانية. والخطوط مستضافة على الموقع نفسه، فلا تُرسل طلبات إلى خوادم خارجية عند التصفّح.</p>
+            <h2>حقوقك</h2>
+            <p>يمكنك في أي وقت طلب الاطّلاع على بياناتك أو تصحيحها أو حذفها، أو إلغاء الاشتراك في النشرة، بمراسلتي على <a href={`mailto:${SITE.email}`} class="ltr">{SITE.email}</a>.</p>
+            <h2>إخلاء مسؤولية</h2>
+            <p>المحتوى البحثي والتحليلي المنشور هنا لأغراض معرفية عامة، ولا يُعدّ استشارة مالية أو قانونية أو استثمارية مُلزِمة، ولا يُغني عن دراسة تُعدّ لحالتك تحديدًا.</p>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <h2>What is collected</h2>
+            <p>No personal data is collected from visitors to this site except what you enter yourself in the contact form or the newsletter form: name, email address, phone (optional), organisation (optional), country, and the details of your request.</p>
+            <h2>How it is used</h2>
+            <p>This data is used for one purpose: to respond to your request, or to send the newsletter you subscribed to. It is not sold, rented, or shared with any third party for marketing purposes.</p>
+            <h2>Where it is stored</h2>
+            <p>The site is hosted on Netlify, and form submissions are stored within its forms service. That is governed by the platform’s own privacy policy in addition to this one.</p>
+            <h2>Cookies and tracking</h2>
+            <p>This site uses no tracking cookies, no analytics tools, and no third-party advertising scripts. Fonts are self-hosted, so browsing sends no requests to external servers.</p>
+            <h2>Your rights</h2>
+            <p>You may at any time request access to, correction of, or deletion of your data, or unsubscribe from the newsletter, by writing to <a href={`mailto:${SITE.email}`} class="ltr">{SITE.email}</a>.</p>
+            <h2>Disclaimer</h2>
+            <p>The research and analysis published here is for general informational purposes. It does not constitute binding financial, legal or investment advice, and is not a substitute for a study prepared for your specific circumstances.</p>
+          </Fragment>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>

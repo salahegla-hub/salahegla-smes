@@ -1,0 +1,45 @@
+---
+import { rel, useT, fmtDate, readingTime, type Locale } from '../i18n/ui';
+import { CATEGORY_LABELS, TYPE_LABELS, sectionOf } from '../content.config';
+import type { Article } from '../lib/content';
+export interface Props { locale: Locale; entry: Article }
+const { locale, entry } = Astro.props;
+const t = useT(locale);
+const d = entry.data;
+const soon = d.status === 'coming-soon';
+const href = soon ? null : (d.externalUrl ?? rel(locale, `${sectionOf(d.contentType)}/${d.slug}`));
+const external = !soon && !!d.externalUrl;
+const Tag = href ? 'a' : 'div';
+const mins = readingTime(entry.body ?? '');
+---
+<Tag class:list={['card acard', { 'is-soon': soon }]} href={href} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+  <div class="acard__tags">
+    <span class="pill pill--muted">{TYPE_LABELS[d.contentType][locale]}</span>
+    {d.peerReviewed && <span class="pill pill--gold">{locale === 'ar' ? 'محكَّم ومنشور' : 'Peer-reviewed'}</span>}
+    {d.featured && !d.peerReviewed && <span class="pill">{t('articles.featured')}</span>}
+    {soon && <span class="pill pill--muted">{t('articles.comingSoon')}</span>}
+  </div>
+  <h3>{d.title}</h3>
+  <p>{d.excerpt}</p>
+  <div class="card__foot">
+    <div class="meta">
+      <span>{CATEGORY_LABELS[d.category][locale]}</span>
+      <span><time datetime={d.publishDate.toISOString()}>{d.displayDate ?? fmtDate(d.publishDate, locale)}</time></span>
+      {!soon && !d.externalUrl && <span>{mins} {t('articles.readingTime')}</span>}
+    </div>
+    {soon
+      ? <span class="acard__soon">{t('articles.comingSoonNote')}</span>
+      : <span class="acard__go">{external ? (d.publishedIn ?? t('articles.readMore')) : t('articles.readMore')}
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 5l7 7-7 7"/><path d="M21 12H3"/></svg>
+        </span>}
+  </div>
+</Tag>
+<style>
+  .acard__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-block-end: 12px }
+  .acard h3 { line-height: 1.45 }
+  .acard.is-soon { opacity: .82; background: #FBFAF7 }
+  .acard__go { display: inline-flex; align-items: center; gap: 7px; margin-block-start: 12px; color: var(--teal-dark); font-weight: 600; font-size: .92rem }
+  .acard__go svg { width: 16px; height: 16px }
+  :global([dir='rtl']) .acard__go svg { transform: scaleX(-1) }
+  .acard__soon { display: block; margin-block-start: 12px; color: var(--text-3); font-size: .88rem }
+</style>

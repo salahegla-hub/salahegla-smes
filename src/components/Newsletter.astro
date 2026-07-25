@@ -1,0 +1,36 @@
+---
+import { useT, type Locale } from '../i18n/ui';
+import Icon from './Icon.astro';
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useT(locale);
+---
+<div class="nl">
+  <span class="nl__ic"><Icon name="mail" /></span>
+  <div class="nl__b">
+    <h3>{t('nl.h')}</h3>
+    <p>{t('nl.p')}</p>
+    <form class="nl__f" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="company-website" action="?subscribed=1">
+      <input type="hidden" name="form-name" value="newsletter" />
+      <input type="hidden" name="locale" value={locale} />
+      <p class="hp" aria-hidden="true"><label>Do not fill<input name="company-website" tabindex="-1" autocomplete="off" /></label></p>
+      <div class="nl__row">
+        <label class="sr-only" for="nl-email">{t('nl.email')}</label>
+        <input id="nl-email" type="email" name="email" required autocomplete="email" inputmode="email" placeholder={t('nl.email')} />
+        <button type="submit" class="btn btn--primary">{t('nl.submit')}</button>
+      </div>
+    </form>
+  </div>
+</div>
+<style>
+  .nl { display: flex; gap: 20px; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: clamp(22px, 3vw, 30px) }
+  .nl__ic { width: 52px; height: 52px; border-radius: 12px; background: var(--gold-tint); display: grid; place-items: center; flex: none }
+  .nl__ic :global(svg) { width: 25px; height: 25px; stroke: var(--gold-dark) }
+  .nl__b { flex: 1 1 0; min-width: 0 }
+  .nl h3 { margin-block-end: 5px }
+  .nl p { color: var(--text-3); font-size: .94rem; margin-block-end: 14px }
+  .nl__row { display: flex; gap: 9px; flex-wrap: wrap }
+  .nl__row input { flex: 1 1 160px; min-width: 0; max-width: 100%; min-height: 48px; padding: 12px 14px; background: var(--bg); border: 1.5px solid var(--line); border-radius: var(--r-sm) }
+  .nl__row input:focus-visible { border-color: var(--teal); box-shadow: var(--focus) }
+  @media (max-width: 560px) { .nl { flex-direction: column; align-items: stretch; gap: 14px } .nl__b { width: 100% } .nl__row .btn { width: 100% } }
+</style>

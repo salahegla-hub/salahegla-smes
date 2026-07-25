@@ -1,0 +1,27 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { useT, LOCALES, type Locale } from '../../../i18n/ui';
+import { getProjects } from '../../../lib/content';
+
+export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = useT(locale);
+const projects = await getProjects(locale);
+---
+<Base locale={locale} title={t('projects.title')} description={t('projects.desc')} path="projects">
+  <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.projects') }]} /></div>
+  <section class="section">
+    <div class="wrap">
+      <div class="shead">
+        <span class="shead__eyebrow">{t('nav.projects')}</span>
+        <h1>{t('projects.h1')}</h1>
+        <p>{t('projects.intro')}</p>
+      </div>
+      {projects.length
+        ? <div class="grid grid-2">{projects.map((p) => <ProjectCard locale={locale} entry={p} />)}</div>
+        : <div class="empty"><strong>{t('projects.empty')}</strong></div>}
+    </div>
+  </section>
+</Base>

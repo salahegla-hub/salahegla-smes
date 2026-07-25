@@ -1,0 +1,247 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import TOC from '../../../components/TOC.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import Icon from '../../../components/Icon.astro';
+import Newsletter from '../../../components/Newsletter.astro';
+import '../../../styles/prose.css';
+import { useT, rel, fmtDate, readingTime, SITE, type Locale } from '../../../i18n/ui';
+import { CATEGORY_LABELS, TYPE_LABELS, sectionOf } from '../../../content.config';
+import { resolveRelatedArticles, translatedSlug } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  // "coming-soon" entries deliberately get no page — cards link nowhere (§8.4)
+  const all = await getCollection('articles', ({ data }) => data.status === 'published' && sectionOf(data.contentType) === 'research');
+  return all.map((entry) => ({ params: { locale: entry.data.locale, slug: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const locale = entry.data.locale as Locale;
+const t = useT(locale);
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const mins = readingTime(entry.body ?? '');
+
+const [related, altSlug] = await Promise.all([
+  resolveRelatedArticles(d.relatedArticles, locale, d.translationKey),
+  translatedSlug('articles', d.translationKey, locale === 'ar' ? 'en' : 'ar'),
+]);
+
+const schema = [
+  {
+    '@type': d.contentType === 'research-paper' || d.contentType === 'working-paper' ? 'ScholarlyArticle' : 'Article',
+    headline: d.title,
+    description: d.excerpt,
+    inLanguage: locale,
+    datePublished: d.publishDate.toISOString(),
+    ...(d.updatedDate ? { dateModified: d.updatedDate.toISOString() } : {}),
+    author: { '@id': `${SITE.url}/#person` },
+    publisher: { '@id': `${SITE.url}/#person` },
+    keywords: d.tags.join(', '),
+    articleSection: CATEGORY_LABELS[d.category][locale],
+    mainEntityOfPage: { '@type': 'WebPage', '@id': new URL(rel(locale, `research/${d.slug}`), SITE.url).href },
+    ...(d.publishedIn ? { isPartOf: d.publishedIn } : {}),
+  },
+];
+---
+
+<Base
+  locale={locale}
+  title={`${d.seoTitle ?? d.title} — ${locale === 'ar' ? SITE.nameAr : SITE.nameEn}`}
+  description={d.seoDescription ?? d.excerpt}
+  path={`research/${d.slug}`}
+  altPath={altSlug ? `research/${altSlug}` : null}
+  canonical={d.canonicalUrl}
+  ogType="article"
+  schema={schema}
+>
+  <div class="wrap">
+    <Breadcrumbs locale={locale} items={[{ label: t('nav.research'), href: rel(locale, 'research') }, { label: d.title }]} />
+  </div>
+
+  <article>
+    <header class="a-hero">
+      <div class="wrap a-hero__in">
+        <div class="a-hero__tags">
+          <span class="pill pill--navy">{TYPE_LABELS[d.contentType][locale]}</span>
+          <a class="pill" href={`${rel(locale, 'research')}?cat=${d.category}`}>{CATEGORY_LABELS[d.category][locale]}</a>
+          {d.peerReviewed && <span class="pill pill--gold">{locale === 'ar' ? 'محكَّم ومنشور' : 'Peer-reviewed'}</span>}
+        </div>
+        <h1>{d.title}</h1>
+        {d.subtitle && <p class="a-hero__sub">{d.subtitle}</p>}
+        <div class="meta a-hero__meta">
+          <span><Icon name="user" />{d.author}</span>
+          <span><Icon name="calendar" /><time datetime={d.publishDate.toISOString()}>{d.displayDate ?? fmtDate(d.publishDate, locale)}</time></span>
+          <span><Icon name="clock" />{mins} {t('articles.readingTime')}</span>
+          {d.updatedDate && (
+            <span>{t('articles.updated')}: <time datetime={d.updatedDate.toISOString()}>{fmtDate(d.updatedDate, locale)}</time></span>
+          )}
+        </div>
+        {d.publishedIn && <p class="a-hero__where">{d.publishedIn}</p>}
+      </div>
+    </header>
+
+    <div class="wrap a-body">
+      <div class="a-actions share">
+        {d.pdfUrl && (
+          <a class="btn btn--outline btn--sm" href={d.pdfUrl} download>
+            <Icon name="download" />
+            {d.pdfUrl.endsWith('.docx') ? (locale === 'ar' ? 'تحميل الورقة (Word)' : 'Download paper (Word)') : t('articles.pdf')}
+          </a>
+        )}
+        <button type="button" class="btn btn--outline btn--sm" id="copy-link" data-copied={t('articles.copied')}>
+          <Icon name="link" />{t('articles.copyLink')}
+        </button>
+        <button type="button" class="btn btn--outline btn--sm" id="print-btn"><Icon name="print" />{t('articles.print')}</button>
+      </div>
+
+      <TOC locale={locale} headings={headings} />
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      {d.references.length > 0 && (
+        <section class="a-refs">
+          <h2>{t('articles.references')}</h2>
+          <ol>{d.references.map((r) => <li>{r}</li>)}</ol>
+        </section>
+      )}
+
+      {d.tags.length > 0 && (
+        <div class="a-tags">
+          {d.tags.map((tag) => <span class="pill pill--muted">{tag}</span>)}
+        </div>
+      )}
+
+      <p class="a-back">
+        <a class="btn btn--outline" href={rel(locale, 'research')}>← {t('research.backToAll')}</a>
+      </p>
+    </div>
+
+    <div class="wrap a-foot">
+      {related.length > 0 && (
+        <section class="a-rel">
+          <h2>{t('articles.related')}</h2>
+          <div class="grid grid-3">{related.map((a) => <ArticleCard locale={locale} entry={a} />)}</div>
+        </section>
+      )}
+
+      <section class="a-rel article-cta">
+        <Newsletter locale={locale} />
+      </section>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .a-hero {
+    background: var(--navy);
+    color: #D3DCE5;
+    padding-block: clamp(30px, 4vw, 50px);
+  }
+  .a-hero__in {
+    max-width: calc(var(--measure) + 80px);
+  }
+  .a-hero__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-block-end: 16px;
+  }
+  .a-hero__tags .pill {
+    text-decoration: none;
+  }
+  .a-hero h1 {
+    color: #fff;
+    font-size: clamp(24px, 1.5vw + 20px, 36px);
+    line-height: 1.4;
+  }
+  .a-hero__sub {
+    color: var(--gold);
+    font-size: clamp(1rem, 0.4vw + 0.95rem, 1.18rem);
+    font-weight: 500;
+    margin-block-start: 12px;
+    line-height: 1.65;
+  }
+  .a-hero__meta {
+    margin-block-start: 20px;
+    color: #A4B3C1;
+  }
+  .a-hero__meta :global(svg) {
+    stroke: var(--gold);
+  }
+  .a-hero__where {
+    margin-block-start: 12px;
+    color: #A4B3C1;
+    font-size: 0.9rem;
+  }
+
+  .a-body {
+    max-width: calc(var(--measure) + 80px);
+    padding-block: clamp(28px, 4vw, 42px);
+  }
+  .a-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-block-end: 26px;
+  }
+  .btn--sm {
+    min-height: 42px;
+    padding: 8px 16px;
+    font-size: 0.88rem;
+  }
+  .a-refs {
+    margin-block-start: 44px;
+    padding-block-start: 24px;
+    border-block-start: 1px solid var(--line);
+  }
+  .a-refs h2 {
+    font-size: 1.1rem;
+    margin-block-end: 12px;
+  }
+  .a-refs ol {
+    padding-inline-start: 1.3em;
+    color: var(--text-3);
+    font-size: 0.92rem;
+  }
+  .a-refs li {
+    margin-block-end: 0.6em;
+  }
+  .a-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-block-start: 32px;
+  }
+  .a-back {
+    margin-block-start: 32px;
+  }
+  .a-foot {
+    padding-block-end: clamp(40px, 6vw, 70px);
+  }
+  .a-rel {
+    margin-block-start: 46px;
+  }
+  .a-rel h2 {
+    margin-block-end: 18px;
+  }
+</style>
+
+<script>
+  const copy = document.getElementById('copy-link');
+  copy?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      const old = copy.textContent;
+      copy.textContent = copy.getAttribute('data-copied');
+      setTimeout(() => (copy.textContent = old), 1800);
+    } catch {
+      /* clipboard unavailable — leave the button as-is */
+    }
+  });
+  document.getElementById('print-btn')?.addEventListener('click', () => window.print());
+</script>

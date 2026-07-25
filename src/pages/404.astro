@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { useT, rel } from '../i18n/ui';
+const locale = 'ar' as const;
+const t = useT(locale);
+---
+<Base locale={locale} title={`${t('404.h')} — 404`} description={t('404.p')} path="404" altPath={null} noindex>
+  <section class="section">
+    <div class="wrap nf">
+      <p class="nf__code ltr">404</p>
+      <h1>{t('404.h')} · Page not found</h1>
+      <p class="lead">{t('404.p')}</p>
+      <p class="lead ltr" lang="en" dir="ltr">The link you opened is incorrect, or the page has moved.</p>
+      <div class="nf__cta">
+        <a class="btn btn--gold" href={rel('ar')}>{t('404.cta')}</a>
+        <a class="btn btn--outline ltr" href={rel('en')} lang="en" dir="ltr">Back to home</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { max-width: 60ch; text-align: center; margin-inline: auto; padding-block: clamp(24px, 6vw, 60px) }
+  .nf__code { font-size: clamp(56px, 10vw, 96px); font-weight: 700; color: var(--gold); line-height: 1 }
+  .nf h1 { margin-block: 12px 14px }
+  .nf__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-block-start: 26px }
+</style>
