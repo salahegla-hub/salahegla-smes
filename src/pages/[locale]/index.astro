@@ -16,8 +16,21 @@ const locale = Astro.params.locale as Locale;
 const t = useT(locale);
 const L = (b: { ar: string; en: string }) => b[locale];
 
-const [articles, projects] = await Promise.all([getArticles(locale, { section: 'research' }), getProjects(locale)]);
-const latest = articles.slice(0, 3);
+/* The homepage feed merges BOTH sections and sorts purely by date, so the
+   newest thing published always surfaces first regardless of its type.
+   This keeps the front page current with zero manual maintenance. */
+const [researchPapers, generalArticles, projects] = await Promise.all([
+  getArticles(locale, { section: 'research' }),
+  getArticles(locale, { section: 'articles' }),
+  getProjects(locale),
+]);
+
+const latest = [...researchPapers, ...generalArticles]
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 6);
+
+const researchCount = researchPapers.length;
+const articlesCount = generalArticles.length;
 const topProjects = projects.slice(0, 2);
 ---
 
@@ -37,7 +50,12 @@ const topProjects = projects.slice(0, 2);
         <p class="hero__sub">{t('home.sub')}</p>
         <div class="hero__cta">
           <a class="btn btn--gold" href={rel(locale, 'contact')}>{t('home.cta1')}</a>
-          <a class="btn btn--ghost" href={rel(locale, 'research')}>{t('home.cta2')}</a>
+          <a class="btn btn--ghost" href={rel(locale, 'research')}>
+            {locale === 'ar' ? 'الأوراق البحثية' : 'Research papers'}
+          </a>
+          <a class="btn btn--ghost" href={rel(locale, 'articles')}>
+            {locale === 'ar' ? 'المقالات' : 'Articles'}
+          </a>
         </div>
       </div>
       <div class="hero__fig">
@@ -83,17 +101,26 @@ const topProjects = projects.slice(0, 2);
     </div>
   </section>
 
-  <!-- ===================== ARTICLES ===================== -->
+  <!-- ============ LATEST PUBLICATIONS (research + articles merged) ============ -->
   <section class="section section--tint">
     <div class="wrap">
       <div class="shead">
-        <span class="shead__eyebrow">{t('home.articles.eyebrow')}</span>
-        <h2>{t('home.articles.h')}</h2>
+        <span class="shead__eyebrow">
+          {locale === 'ar' ? 'أوراق بحثية ومقالات' : 'Research papers & articles'}
+        </span>
+        <h2>{locale === 'ar' ? 'أحدث المنشورات' : 'Latest publications'}</h2>
       </div>
       <div class="grid grid-3">
         {latest.map((a) => <ArticleCard locale={locale} entry={a} />)}
       </div>
-      <p class="more-row"><a class="btn btn--outline" href={rel(locale, 'research')}>{t('home.articles.all')}</a></p>
+      <p class="more-row more-row--split">
+        <a class="btn btn--outline" href={rel(locale, 'research')}>
+          {locale === 'ar' ? `كل الأوراق البحثية (${researchCount})` : `All research papers (${researchCount})`}
+        </a>
+        <a class="btn btn--outline" href={rel(locale, 'articles')}>
+          {locale === 'ar' ? `كل المقالات (${articlesCount})` : `All articles (${articlesCount})`}
+        </a>
+      </p>
     </div>
   </section>
 
@@ -235,6 +262,12 @@ const topProjects = projects.slice(0, 2);
 
   .more-row {
     margin-block-start: clamp(22px, 3vw, 32px);
+  }
+  /* two browse buttons side by side, wrapping on narrow screens */
+  .more-row--split {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
   /* ---- credentials ---- */
