@@ -61,7 +61,7 @@ export const STATUSES = ['published', 'draft', 'coming-soon', 'archived'] as con
 export const CATEGORY_LABELS: Record<(typeof CATEGORIES)[number], { ar: string; en: string }> = {
   'development-economics': { ar: 'اقتصاديات التنمية', en: 'Development Economics' },
   'public-administration': { ar: 'الإدارة العامة', en: 'Public Administration' },
-  'economics-policy': { ar: 'الاقتصاد والسياسات العامة', en: 'Economics & Public Policy' },
+  'economics-policy': { ar: 'الاقتصاد الكلي والتنمية', en: 'Macroeconomics & Development' },
   'sme-finance': { ar: 'تمويل المنشآت الصغيرة والمتوسطة', en: 'SME Finance' },
   'financial-credit-analysis': { ar: 'التحليل المالي والائتماني', en: 'Financial & Credit Analysis' },
   'feasibility-investment': { ar: 'دراسات الجدوى والاستثمار', en: 'Feasibility Studies & Investment' },
