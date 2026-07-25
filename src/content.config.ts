@@ -37,16 +37,23 @@ export const CONTENT_TYPES = [
   'guide',
   'case-study',
   'presentation',
+  'critical-reading',
 ] as const;
 
 
-/** Two public sections: research papers vs. articles. Derived from
- *  contentType so existing entries need no frontmatter change. */
+/** Three public sections: research papers, articles, and critical readings.
+ *  Derived from contentType so existing entries need no frontmatter change.
+ *  NOTE: 'articles' stays the fallback, so any future type added without
+ *  being listed below lands there rather than breaking the build. */
 export const RESEARCH_TYPES = ['research-paper', 'working-paper', 'policy-brief', 'economic-analysis', 'presentation'] as const;
 export const ARTICLE_TYPES = ['article', 'guide', 'case-study'] as const;
-export type Section = 'research' | 'articles';
-export const sectionOf = (t: string): Section =>
-  (RESEARCH_TYPES as readonly string[]).includes(t) ? 'research' : 'articles';
+export const READING_TYPES = ['critical-reading'] as const;
+export type Section = 'research' | 'articles' | 'readings';
+export const sectionOf = (t: string): Section => {
+  if ((RESEARCH_TYPES as readonly string[]).includes(t)) return 'research';
+  if ((READING_TYPES as readonly string[]).includes(t)) return 'readings';
+  return 'articles';
+};
 
 export const STATUSES = ['published', 'draft', 'coming-soon', 'archived'] as const;
 
@@ -71,6 +78,7 @@ export const TYPE_LABELS: Record<(typeof CONTENT_TYPES)[number], { ar: string; e
   guide: { ar: 'دليل عملي', en: 'Guide' },
   'case-study': { ar: 'دراسة حالة', en: 'Case Study' },
   presentation: { ar: 'عرض تقديمي', en: 'Presentation' },
+  'critical-reading': { ar: 'قراءة نقدية', en: 'Critical Reading' },
 };
 
 /** Optional badge shown on a card, e.g. peer-reviewed. Only set when true. */
@@ -112,6 +120,11 @@ const articles = defineCollection({
     pdfUrl: z.string().optional(),
     /** External link when the full text lives elsewhere (e.g. a journal). */
     externalUrl: z.string().url().optional(),
+    /** For critical readings only: the work being read, and where to find it.
+     *  Kept separate from `externalUrl` so a reading never looks as though the
+     *  source paper were the author's own published work. */
+    sourceCitation: z.string().optional(),
+    sourceUrl: z.string().url().optional(),
     references: z.array(z.string()).default([]),
     relatedArticles: z.array(z.string()).default([]), // translationKeys
     ...seo,
