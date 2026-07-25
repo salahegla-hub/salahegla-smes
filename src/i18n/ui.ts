@@ -19,7 +19,7 @@ export const SITE = {
   nameEn: 'Salah Eldin Mazen Al-Ajla',
   cityAr: 'الدوحة، قطر',
   cityEn: 'Doha, Qatar',
-  tagEn: 'Economic Research & Policy Insights',
+  tagEn: 'Economic Researcher',
 } as const;
 
 export const ui = {

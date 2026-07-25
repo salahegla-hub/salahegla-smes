@@ -4,7 +4,7 @@ slug: "foreign-aid-effectiveness-palestine"
 locale: "ar"
 translationKey: "foreign-aid-effectiveness"
 excerpt: "لماذا تظلّ الآثار الإيجابية للمساعدات الخارجية ضعيفة رغم تجاوز حجمها 36 مليار دولار حتى 2020؟ ورقة تحلّل أثر المساعدات على الاقتصاد الفلسطيني وأسباب محدودية فاعليتها التنموية."
-category: "economics-policy"
+category: "development-economics"
 tags: ["المساعدات الخارجية", "الاقتصاد الفلسطيني", "فاعلية المعونة", "التنمية", "الاعتماد على المانحين"]
 contentType: "working-paper"
 status: "published"

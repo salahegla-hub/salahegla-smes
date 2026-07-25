@@ -4,7 +4,7 @@ slug: "gaza-economy-recovery-omran"
 locale: "ar"
 translationKey: "gaza-economy-recovery"
 excerpt: "بحث محكَّم منشور في مجلة عُمران (المركز العربي للأبحاث ودراسة السياسات)، العدد 53، المجلد 14، صيف 2025، ص 123–147. يقيس البحث أثر الحرب في النشاط الاقتصادي بقطاع غزة عبر مؤشرات كمّية، ويستعرض مفهوم التعافي الاقتصادي وتحدياته والتدخلات المطلوبة لتحقيقه."
-category: "economics-policy"
+category: "development-economics"
 tags: ["الاقتصاد الفلسطيني", "قطاع غزة", "آثار الحرب", "النشاط الاقتصادي", "التعافي الاقتصادي"]
 contentType: "research-paper"
 status: "published"

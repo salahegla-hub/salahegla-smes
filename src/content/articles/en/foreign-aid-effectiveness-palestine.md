@@ -4,7 +4,7 @@ slug: "foreign-aid-effectiveness-palestine"
 locale: "en"
 translationKey: "foreign-aid-effectiveness"
 excerpt: "Why do the positive effects of foreign aid remain weak despite more than US$36 billion delivered by 2020? A paper analysing aid's impact on the Palestinian economy and the reasons its developmental effectiveness stays limited."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Foreign aid", "Palestinian economy", "Aid effectiveness", "Development", "Donor dependence"]
 contentType: "working-paper"
 status: "published"

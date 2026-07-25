@@ -4,7 +4,7 @@ slug: "gaza-economy-recovery-omran"
 locale: "en"
 translationKey: "gaza-economy-recovery"
 excerpt: "Peer-reviewed research in Omran Journal (Arab Center for Research and Policy Studies), Issue 53, Vol. 14, Summer 2025, pp. 123–147. The paper measures the war's impact on economic activity in Gaza through quantitative indicators and examines the concept, challenges and required interventions of economic recovery."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Palestinian economy", "Gaza Strip", "Effects of war", "Economic activity", "Economic recovery"]
 contentType: "research-paper"
 status: "published"

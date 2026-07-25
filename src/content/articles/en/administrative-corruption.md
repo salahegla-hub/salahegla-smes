@@ -5,7 +5,7 @@ slug: "administrative-corruption"
 locale: "en"
 translationKey: "administrative-corruption"
 excerpt: "Administrative corruption as a pathology afflicting the state's administrative apparatus from top to bottom — a reflective paper on its definition, forms, causes and the means of confronting it."
-category: "economics-policy"
+category: "public-administration"
 tags: ["Administrative corruption", "Public administration", "Governance", "Integrity", "Public services"]
 contentType: "working-paper"
 status: "published"

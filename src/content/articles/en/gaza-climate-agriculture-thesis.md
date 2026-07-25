@@ -5,7 +5,7 @@ slug: "gaza-climate-agriculture-thesis"
 locale: "en"
 translationKey: "gaza-climate-agriculture"
 excerpt: "An econometric study linking the SPEI drought index to the NDVI vegetation index across Gaza's governorates, testing whether Israeli bombardment of agricultural land amplified the effect of climate change on the sector."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Climate change", "Agriculture", "Gaza Strip", "SPEI drought index", "NDVI", "Econometrics"]
 contentType: "research-paper"
 status: "published"

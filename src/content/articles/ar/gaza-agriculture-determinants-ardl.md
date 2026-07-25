@@ -4,7 +4,7 @@ slug: "gaza-agriculture-determinants-ardl"
 locale: "ar"
 translationKey: "gaza-agriculture-determinants"
 excerpt: "نموذج ARDL على سلسلة زمنية ربعية 1994–2024 يقيس أثر الناتج المحلي والصادرات والقصف والحصار ومؤشّر الجفاف SPEI-6 على القيمة المضافة للقطاع الزراعي في غزة."
-category: "economics-policy"
+category: "development-economics"
 tags: ["الاقتصاد الزراعي", "قطاع غزة", "نموذج ARDL", "مؤشر الجفاف SPEI", "الحصار", "STATA"]
 contentType: "research-paper"
 status: "published"

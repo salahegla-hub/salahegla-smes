@@ -4,7 +4,7 @@ slug: "tunisia-economic-development"
 locale: "ar"
 translationKey: "tunisia-economic-development"
 excerpt: "قراءة لخمسين عامًا من التنمية التونسية (1970–2019): الدخل والنمو والهيكل الاقتصادي، ومستويات الفقر وتوزيع الدخل، والدين الخارجي والاستثمار الأجنبي، وعلاقة تونس بالبنك الدولي وصندوق النقد."
-category: "economics-policy"
+category: "development-economics"
 tags: ["تونس", "التنمية الاقتصادية", "الفقر", "الدين الخارجي", "صندوق النقد الدولي", "البنك الدولي"]
 contentType: "working-paper"
 status: "published"

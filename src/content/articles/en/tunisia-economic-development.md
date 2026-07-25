@@ -4,7 +4,7 @@ slug: "tunisia-economic-development"
 locale: "en"
 translationKey: "tunisia-economic-development"
 excerpt: "A reading of fifty years of Tunisian development (1970–2019): income, growth and economic structure; poverty levels and income distribution; external debt and foreign investment; and Tunisia's relationship with the World Bank and the IMF."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Tunisia", "Economic development", "Poverty", "External debt", "IMF", "World Bank"]
 contentType: "working-paper"
 status: "published"

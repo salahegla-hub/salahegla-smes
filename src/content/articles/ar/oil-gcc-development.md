@@ -4,7 +4,7 @@ slug: "oil-gcc-development"
 locale: "ar"
 translationKey: "oil-gcc-development"
 excerpt: "كيف شكّل النفط مسارات التنمية والحوكمة في المنطقة؟ عرض بحثي يقارن بين الدول الغنية بالموارد قليلة العمالة والغنية بالموارد كثيرة العمالة، ويناقش «لعنة الموارد» واستقلالية الدولة وقدرتها واستراتيجية استيراد العمالة الخليجية."
-category: "development-gulf"
+category: "development-economics"
 tags: ["النفط", "مجلس التعاون الخليجي", "لعنة الموارد", "الحوكمة", "الاقتصاد الريعي", "سوق العمل"]
 contentType: "presentation"
 status: "published"

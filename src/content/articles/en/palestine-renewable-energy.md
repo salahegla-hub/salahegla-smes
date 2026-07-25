@@ -4,16 +4,14 @@ slug: "palestine-renewable-energy"
 locale: "en"
 translationKey: "palestine-renewable-energy"
 excerpt: "The Palestinian electricity sector's 86% dependence on Israel makes energy security a structural question. An article on how renewable energy use has developed in Palestine and the obstacles it faces."
-category: "energy-markets"
+category: "development-economics"
 tags: ["Renewable energy", "Energy security", "Electricity sector", "Oslo Accords", "Palestine"]
-contentType: "article"
-status: "draft"
-publishDate: 2021-12-01
+contentType: "working-paper"
+status: "published"
+publishDate: 2021-11-01
 pdfUrl: "/files/palestine-renewable-energy.pdf"
 seoDescription: "Article: the state of renewable energy in Palestine and the obstacles to its development, and the electricity sector's dependence on Israel."
 ---
-
-> **⚠️ Not currently published on the site — awaiting confirmation of its date.** The document carries no date on its first page.
 
 > **Unpublished paper.** The full text is in Arabic and available as a PDF from the top of this page.
 

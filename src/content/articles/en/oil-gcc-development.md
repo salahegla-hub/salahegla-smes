@@ -4,7 +4,7 @@ slug: "oil-gcc-development"
 locale: "en"
 translationKey: "oil-gcc-development"
 excerpt: "How did oil shape development and governance in the region? A research presentation comparing resource-rich labour-poor and resource-rich labour-abundant states, covering the resource curse, state autonomy and capacity, and the Gulf's distinctive labour-import strategy."
-category: "development-gulf"
+category: "development-economics"
 tags: ["Oil", "GCC", "Resource curse", "Governance", "Rentier economy", "Labour markets"]
 contentType: "presentation"
 status: "published"

@@ -5,7 +5,7 @@ slug: "administrative-corruption"
 locale: "ar"
 translationKey: "administrative-corruption"
 excerpt: "الفساد الإداري بوصفه ظاهرة مرضية تصيب الجهاز الإداري للدولة من قمّة الهرم إلى قاعدته — ورقة تأمّلية في تعريفه وصوره وأسبابه وسبل مواجهته."
-category: "economics-policy"
+category: "public-administration"
 tags: ["الفساد الإداري", "الإدارة العامة", "الحوكمة", "النزاهة", "المرافق العامة"]
 contentType: "working-paper"
 status: "published"

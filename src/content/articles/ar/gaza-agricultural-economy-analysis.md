@@ -4,7 +4,7 @@ slug: "gaza-agricultural-economy-analysis"
 locale: "ar"
 translationKey: "gaza-agricultural-economy"
 excerpt: "لماذا تعجز الإمكانات الزراعية الكامنة في غزة عن التحوّل إلى رافعة تنموية؟ مقارنة إحصائية بين تعدادَي 2010 و2021 تكشف تحوّل الإنتاج من الزراعات طويلة الأجل إلى النشاطات سريعة العائد."
-category: "economics-policy"
+category: "development-economics"
 tags: ["الاقتصاد الزراعي", "قطاع غزة", "الأمن الغذائي", "تفتّت الحيازات", "السياسات الزراعية", "التحليل المكاني"]
 contentType: "research-paper"
 status: "published"

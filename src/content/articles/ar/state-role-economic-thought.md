@@ -5,7 +5,7 @@ slug: "state-role-economic-thought"
 locale: "ar"
 translationKey: "state-role-economic-thought"
 excerpt: "تتبّع للتطوّر التاريخي لدور الدولة الاقتصادي في الفكر الاقتصادي — من الدولة الحارسة عند الكلاسيك والتخطيط المركزي عند ماركس، إلى كينز والليبرالية الحديثة، وعودة الجدل بعد الأزمة المالية العالمية."
-category: "economics-policy"
+category: "development-economics"
 tags: ["الفكر الاقتصادي", "دور الدولة", "الكلاسيكية", "الكينزية", "الليبرالية الجديدة", "الأزمة المالية"]
 contentType: "working-paper"
 status: "published"

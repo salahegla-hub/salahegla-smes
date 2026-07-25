@@ -4,7 +4,7 @@ slug: "productive-sectors-growth-palestine"
 locale: "en"
 translationKey: "productive-sectors-growth"
 excerpt: "Why do gains in merchandise exports fail to show up in GDP? A descriptive and econometric study of how industry and agriculture contribute to growth, and the external and internal constraints on both."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Productive sectors", "Economic growth", "Industry", "Agriculture", "Trade balance", "Palestinian economy"]
 contentType: "working-paper"
 status: "published"

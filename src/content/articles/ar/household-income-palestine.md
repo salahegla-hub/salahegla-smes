@@ -4,7 +4,7 @@ slug: "household-income-palestine"
 locale: "ar"
 translationKey: "household-income"
 excerpt: "دراسة قياسية على بيانات «المؤشر العربي» 2022 تقيس أثر الأوضاع الاقتصادية والسياسية والأمنية على دخل الأسر الفلسطينية، بالتحكّم بالعوامل الديمغرافية والجغرافية."
-category: "economics-policy"
+category: "development-economics"
 tags: ["الدخل الشهري", "الأسر الفلسطينية", "المؤشر العربي", "الفقر", "الاقتصاد القياسي"]
 contentType: "working-paper"
 status: "published"

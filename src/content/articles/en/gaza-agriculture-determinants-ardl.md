@@ -4,7 +4,7 @@ slug: "gaza-agriculture-determinants-ardl"
 locale: "en"
 translationKey: "gaza-agriculture-determinants"
 excerpt: "An ARDL model on quarterly series for 1994–2024, measuring the effect of GDP, exports, bombardment, blockade and the SPEI-6 drought index on agricultural value added in Gaza."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Agricultural economy", "Gaza Strip", "ARDL model", "SPEI drought index", "Blockade", "STATA"]
 contentType: "research-paper"
 status: "published"

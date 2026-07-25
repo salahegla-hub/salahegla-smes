@@ -4,7 +4,7 @@ slug: "wages-unemployment-palestine"
 locale: "ar"
 translationKey: "wages-unemployment"
 excerpt: "دراسة قياسية بالسلاسل الزمنية تجد علاقة طردية بين الأجور النقدية والتضخم والبطالة على المدى الطويل — عكس ما يتوقّعه منحنى فيلبس — وتُرجع ذلك إلى الاختلال الهيكلي وغياب العملة الوطنية والتضخم المستورد."
-category: "economics-policy"
+category: "development-economics"
 tags: ["الأجور", "البطالة", "منحنى فيلبس", "التضخم المستورد", "الاقتصاد الفلسطيني", "السلاسل الزمنية"]
 contentType: "working-paper"
 status: "published"

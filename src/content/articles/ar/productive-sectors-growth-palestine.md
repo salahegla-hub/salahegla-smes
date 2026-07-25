@@ -4,7 +4,7 @@ slug: "productive-sectors-growth-palestine"
 locale: "ar"
 translationKey: "productive-sectors-growth"
 excerpt: "لماذا لا تنعكس الزيادة في الصادرات السلعية على الناتج المحلي؟ دراسة وصفية وقياسية لمساهمة قطاعَي الصناعة والزراعة في النمو، ومعوّقاتهما الخارجية والداخلية."
-category: "economics-policy"
+category: "development-economics"
 tags: ["القطاعات الإنتاجية", "النمو الاقتصادي", "الصناعة", "الزراعة", "الميزان التجاري", "الاقتصاد الفلسطيني"]
 contentType: "working-paper"
 status: "published"

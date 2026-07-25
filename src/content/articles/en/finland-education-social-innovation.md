@@ -4,7 +4,7 @@ slug: "finland-education-social-innovation"
 locale: "en"
 translationKey: "finland-education-social-innovation"
 excerpt: "How did Finland turn a low-quality, bureaucratic education system into the highest-ranked in the OECD? A brief covering six innovative reforms, their results, the factors behind their success, and what makes them sustainable."
-category: "economics-policy"
+category: "public-administration"
 tags: ["Social innovation", "Education policy", "Finland", "Equality", "Public policy"]
 contentType: "policy-brief"
 status: "published"

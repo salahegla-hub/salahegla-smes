@@ -4,7 +4,7 @@ slug: "household-income-palestine"
 locale: "en"
 translationKey: "household-income"
 excerpt: "An econometric study on 2022 Arab Index data measuring the effect of economic, political and security conditions on Palestinian household income, controlling for demographic and geographic factors."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Household income", "Palestinian households", "Arab Index", "Poverty", "Econometrics"]
 contentType: "working-paper"
 status: "published"

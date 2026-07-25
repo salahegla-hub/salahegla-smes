@@ -4,7 +4,7 @@ slug: "wages-unemployment-palestine"
 locale: "en"
 translationKey: "wages-unemployment"
 excerpt: "A time-series econometric study finding a positive long-run relationship between nominal wages, inflation and unemployment — contrary to the Phillips curve — attributed to structural distortion, the absence of a national currency, and imported inflation."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Wages", "Unemployment", "Phillips curve", "Imported inflation", "Palestinian economy", "Time series"]
 contentType: "working-paper"
 status: "published"

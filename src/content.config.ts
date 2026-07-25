@@ -18,6 +18,8 @@ const LOCALE = z.enum(['ar', 'en']);
 const localeId = ({ entry }: { entry: string }) => entry.replace(/\.md$/, '');
 
 export const CATEGORIES = [
+  'development-economics',
+  'public-administration',
   'economics-policy',
   'sme-finance',
   'financial-credit-analysis',
@@ -50,6 +52,8 @@ export const STATUSES = ['published', 'draft', 'coming-soon', 'archived'] as con
 
 /** Display labels for taxonomy values, in both languages. */
 export const CATEGORY_LABELS: Record<(typeof CATEGORIES)[number], { ar: string; en: string }> = {
+  'development-economics': { ar: 'اقتصاديات التنمية', en: 'Development Economics' },
+  'public-administration': { ar: 'الإدارة العامة', en: 'Public Administration' },
   'economics-policy': { ar: 'الاقتصاد والسياسات العامة', en: 'Economics & Public Policy' },
   'sme-finance': { ar: 'تمويل المنشآت الصغيرة والمتوسطة', en: 'SME Finance' },
   'financial-credit-analysis': { ar: 'التحليل المالي والائتماني', en: 'Financial & Credit Analysis' },

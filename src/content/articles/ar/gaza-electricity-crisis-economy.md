@@ -4,7 +4,7 @@ slug: "gaza-electricity-crisis-economy"
 locale: "ar"
 translationKey: "gaza-electricity-crisis"
 excerpt: "دراسة تحليلية وصفية وكمّية لأثر انقطاع التيار الكهربائي المستمرّ منذ أكثر من عقد ونصف على القطاعات الاقتصادية في غزة، وارتفاع التكاليف التشغيلية، وانعكاس ذلك على الإنتاجية والقيمة المضافة والناتج المحلي."
-category: "energy-markets"
+category: "development-economics"
 tags: ["أزمة الكهرباء", "قطاع غزة", "القطاعات الاقتصادية", "الناتج المحلي الإجمالي", "الطاقة المتجددة"]
 contentType: "working-paper"
 status: "published"

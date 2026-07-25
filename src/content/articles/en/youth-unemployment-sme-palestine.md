@@ -4,7 +4,7 @@ slug: "youth-unemployment-sme-palestine"
 locale: "en"
 translationKey: "youth-unemployment-sme"
 excerpt: "Youth unemployment (15–24) rose from 20% in 2007 to 44.7% in 2017, reaching 73% among young women in 2020. A paper analysing the characteristics of the problem and the role SMEs can play in addressing it."
-category: "sme-finance"
+category: "development-economics"
 tags: ["Youth unemployment", "SMEs", "Labour market", "Graduates", "Palestinian economy"]
 contentType: "working-paper"
 status: "published"

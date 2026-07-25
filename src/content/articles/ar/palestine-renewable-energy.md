@@ -4,16 +4,14 @@ slug: "palestine-renewable-energy"
 locale: "ar"
 translationKey: "palestine-renewable-energy"
 excerpt: "اعتماد قطاع الكهرباء الفلسطيني على إسرائيل بنسبة 86% يجعل أمن الطاقة قضية بنيوية. مقالة تسلّط الضوء على تطوّر استخدام الطاقة المتجددة في فلسطين والتحديات التي تواجهه."
-category: "energy-markets"
+category: "development-economics"
 tags: ["الطاقة المتجددة", "أمن الطاقة", "قطاع الكهرباء", "اتفاقيات أوسلو", "فلسطين"]
-contentType: "article"
-status: "draft"
-publishDate: 2021-12-01
+contentType: "working-paper"
+status: "published"
+publishDate: 2021-11-01
 pdfUrl: "/files/palestine-renewable-energy.pdf"
 seoDescription: "مقالة: واقع الطاقة المتجددة في فلسطين ومعوّقات تطوّرها، واعتماد قطاع الكهرباء على إسرائيل وأثره على أمن الطاقة."
 ---
-
-> **⚠️ هذه الورقة غير منشورة على الموقع حاليًا — بانتظار تأكيد تاريخها.** الملف لا يحمل تاريخًا على صفحته الأولى؛ يكفي تحديد الشهر والسنة لتُنشَر.
 
 > **ورقة غير منشورة.** النصّ الكامل متاح للتحميل بصيغة PDF من أعلى الصفحة.
 

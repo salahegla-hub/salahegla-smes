@@ -4,7 +4,7 @@ slug: "gaza-agricultural-economy-analysis"
 locale: "en"
 translationKey: "gaza-agricultural-economy"
 excerpt: "Why does Gaza's latent agricultural potential fail to become a development lever? A statistical comparison of the 2010 and 2021 censuses reveals a shift from long-cycle cultivation toward quick-return activity."
-category: "economics-policy"
+category: "development-economics"
 tags: ["Agricultural economy", "Gaza Strip", "Food security", "Land fragmentation", "Agricultural policy", "Spatial analysis"]
 contentType: "research-paper"
 status: "published"

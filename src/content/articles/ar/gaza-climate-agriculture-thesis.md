@@ -5,7 +5,7 @@ slug: "gaza-climate-agriculture-thesis"
 locale: "ar"
 translationKey: "gaza-climate-agriculture"
 excerpt: "دراسة قياسية تربط بين مؤشّر الجفاف SPEI ومؤشّر الإخضرار النباتي NDVI عبر محافظات غزة، وتختبر ما إذا كان القصف الإسرائيلي على الأراضي الزراعية قد ضاعف أثر التغير المناخي على القطاع الزراعي."
-category: "economics-policy"
+category: "development-economics"
 tags: ["التغير المناخي", "القطاع الزراعي", "قطاع غزة", "مؤشر الجفاف SPEI", "الإخضرار النباتي NDVI", "الاقتصاد القياسي"]
 contentType: "research-paper"
 status: "published"

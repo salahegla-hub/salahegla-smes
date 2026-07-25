@@ -5,7 +5,7 @@ slug: "state-role-economic-thought"
 locale: "en"
 translationKey: "state-role-economic-thought"
 excerpt: "Tracing how the state's economic role evolved across schools of economic thought — from the classical night-watchman state and Marxist central planning, through Keynes and neoliberalism, to the debate reopened by the global financial crisis."
-category: "economics-policy"
+category: "development-economics"
 tags: ["History of economic thought", "Role of the state", "Classical economics", "Keynesianism", "Neoliberalism", "Financial crisis"]
 contentType: "working-paper"
 status: "published"

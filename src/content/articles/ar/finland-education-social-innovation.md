@@ -4,7 +4,7 @@ slug: "finland-education-social-innovation"
 locale: "ar"
 translationKey: "finland-education-social-innovation"
 excerpt: "كيف حوّلت فنلندا نظامًا تعليميًا منخفض الجودة ومثقلًا بالبيروقراطية إلى الأول بين دول منظمة التعاون الاقتصادي والتنمية؟ موجز يستعرض ستّ إصلاحات ابتكارية وعوامل نجاحها وشروط استدامتها."
-category: "economics-policy"
+category: "public-administration"
 tags: ["الابتكار الاجتماعي", "سياسة التعليم", "فنلندا", "المساواة", "السياسات العامة"]
 contentType: "policy-brief"
 status: "published"

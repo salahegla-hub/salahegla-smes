@@ -32,7 +32,14 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
 <header class="site-header">
   <div class="hd">
     <a class="brand" href={rel(locale)}>
-      <span class="brand__mark" aria-hidden="true">S</span>
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none">
+          <path d="M4 19V9.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
+          <path d="M12 19V4.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
+          <path d="M20 19V13" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
+          <path d="M3.5 12.5L11 6.2a1 1 0 0 1 1.2-.05L14 7.5a1 1 0 0 0 1.2-.05l5.3-4.4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
       <span class="brand__txt">
         <span class="brand__name">{locale === 'ar' ? SITE.nameAr : SITE.nameEn}</span>
         <span class="brand__sub">{SITE.tagEn}</span>
@@ -121,9 +128,6 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
     color: var(--navy);
     display: grid;
     place-items: center;
-    font-weight: 700;
-    font-size: 19px;
-    font-family: var(--font-en);
     flex: none;
   }
   .brand__txt {

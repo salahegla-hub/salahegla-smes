@@ -4,7 +4,7 @@ slug: "youth-unemployment-sme-palestine"
 locale: "ar"
 translationKey: "youth-unemployment-sme"
 excerpt: "بطالة الشباب (15–24) قفزت من 20% عام 2007 إلى 44.7% عام 2017، وبلغت 73% بين الإناث عام 2020. ورقة تحلّل خصائص الظاهرة وتبحث دور المنشآت الصغيرة والمتوسطة في معالجتها."
-category: "sme-finance"
+category: "development-economics"
 tags: ["بطالة الشباب", "المشاريع الصغيرة والمتوسطة", "سوق العمل", "خريجو الجامعات", "الاقتصاد الفلسطيني"]
 contentType: "working-paper"
 status: "published"

@@ -4,7 +4,7 @@ slug: "gaza-electricity-crisis-economy"
 locale: "en"
 translationKey: "gaza-electricity-crisis"
 excerpt: "A descriptive and quantitative study of how more than fifteen years of power cuts have affected Gaza's economic sectors — raising operating costs and depressing productivity, sectoral value added and GDP."
-category: "energy-markets"
+category: "development-economics"
 tags: ["Electricity crisis", "Gaza Strip", "Economic sectors", "GDP", "Renewable energy"]
 contentType: "working-paper"
 status: "published"
