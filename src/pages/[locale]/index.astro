@@ -19,13 +19,14 @@ const L = (b: { ar: string; en: string }) => b[locale];
 /* The homepage feed merges BOTH sections and sorts purely by date, so the
    newest thing published always surfaces first regardless of its type.
    This keeps the front page current with zero manual maintenance. */
-const [researchPapers, generalArticles, projects] = await Promise.all([
+const [researchPapers, generalArticles, readings, projects] = await Promise.all([
   getArticles(locale, { section: 'research' }),
   getArticles(locale, { section: 'articles' }),
+  getArticles(locale, { section: 'readings' }),
   getProjects(locale),
 ]);
 
-const merged = [...researchPapers, ...generalArticles].sort(
+const merged = [...researchPapers, ...generalArticles, ...readings].sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
 );
 
@@ -35,6 +36,7 @@ const latest = merged.slice(1, 7);
 
 const researchCount = researchPapers.length;
 const articlesCount = generalArticles.length;
+const readingsCount = readings.length;
 const topProjects = projects.slice(0, 2);
 
 /** Short type label for the pinned card, kept local so this page needs no extra imports. */
@@ -48,6 +50,7 @@ function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): stri
     'economic-analysis': { ar: 'تحليل اقتصادي', en: 'Economic analysis' },
     guide: { ar: 'دليل عملي', en: 'Guide' },
     'case-study': { ar: 'دراسة حالة', en: 'Case study' },
+    'critical-reading': { ar: 'قراءة نقدية', en: 'Critical reading' },
   };
   const hit = data.contentType ? map[data.contentType] : undefined;
   return hit ? hit[locale] : locale === 'ar' ? 'منشور' : 'Publication';
@@ -150,7 +153,7 @@ function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): stri
     <div class="wrap">
       <div class="shead">
         <span class="shead__eyebrow">
-          {locale === 'ar' ? 'أوراق بحثية ومقالات' : 'Research papers & articles'}
+          {locale === 'ar' ? 'أوراق بحثية ومقالات وقراءات' : 'Research, articles & readings'}
         </span>
         <h2>{locale === 'ar' ? 'أحدث المنشورات' : 'Latest publications'}</h2>
       </div>
@@ -164,6 +167,11 @@ function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): stri
         <a class="btn btn--outline" href={rel(locale, 'articles')}>
           {locale === 'ar' ? `كل المقالات (${articlesCount})` : `All articles (${articlesCount})`}
         </a>
+        {readingsCount > 0 && (
+          <a class="btn btn--outline" href={rel(locale, 'readings')}>
+            {locale === 'ar' ? `القراءات النقدية (${readingsCount})` : `Critical readings (${readingsCount})`}
+          </a>
+        )}
       </p>
     </div>
   </section>
