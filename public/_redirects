@@ -1,0 +1,43 @@
+# Legacy URLs from the previous single-page site.
+# Lives inside the publish folder so redirects work on manual (drag-and-drop)
+# deploys too, not only on CI builds that read netlify.toml.
+/                                             /ar/                                          301!
+/articles/infrastructure-sme-finance-gulf     /ar/articles/infrastructure-sme-finance-gulf   301
+/articles/*                                   /ar/articles/:splat                            301
+/ar/consultation                               /ar/contact                                    301
+/en/consultation                               /en/contact                                    301
+
+
+# papers moved from /articles/ to /research/
+/ar/articles/administrative-corruption   /ar/research/administrative-corruption   301
+/en/articles/administrative-corruption   /en/research/administrative-corruption   301
+/ar/articles/finland-education-social-innovation   /ar/research/finland-education-social-innovation   301
+/en/articles/finland-education-social-innovation   /en/research/finland-education-social-innovation   301
+/ar/articles/foreign-aid-effectiveness-palestine   /ar/research/foreign-aid-effectiveness-palestine   301
+/en/articles/foreign-aid-effectiveness-palestine   /en/research/foreign-aid-effectiveness-palestine   301
+/ar/articles/gaza-agricultural-economy-analysis   /ar/research/gaza-agricultural-economy-analysis   301
+/en/articles/gaza-agricultural-economy-analysis   /en/research/gaza-agricultural-economy-analysis   301
+/ar/articles/gaza-agriculture-determinants-ardl   /ar/research/gaza-agriculture-determinants-ardl   301
+/en/articles/gaza-agriculture-determinants-ardl   /en/research/gaza-agriculture-determinants-ardl   301
+/ar/articles/gaza-climate-agriculture-thesis   /ar/research/gaza-climate-agriculture-thesis   301
+/en/articles/gaza-climate-agriculture-thesis   /en/research/gaza-climate-agriculture-thesis   301
+/ar/articles/gaza-economy-recovery-omran   /ar/research/gaza-economy-recovery-omran   301
+/en/articles/gaza-economy-recovery-omran   /en/research/gaza-economy-recovery-omran   301
+/ar/articles/gaza-electricity-crisis-economy   /ar/research/gaza-electricity-crisis-economy   301
+/en/articles/gaza-electricity-crisis-economy   /en/research/gaza-electricity-crisis-economy   301
+/ar/articles/household-income-palestine   /ar/research/household-income-palestine   301
+/en/articles/household-income-palestine   /en/research/household-income-palestine   301
+/ar/articles/infrastructure-sme-finance-gulf   /ar/research/infrastructure-sme-finance-gulf   301
+/en/articles/infrastructure-sme-finance-gulf   /en/research/infrastructure-sme-finance-gulf   301
+/ar/articles/oil-gcc-development   /ar/research/oil-gcc-development   301
+/en/articles/oil-gcc-development   /en/research/oil-gcc-development   301
+/ar/articles/productive-sectors-growth-palestine   /ar/research/productive-sectors-growth-palestine   301
+/en/articles/productive-sectors-growth-palestine   /en/research/productive-sectors-growth-palestine   301
+/ar/articles/state-role-economic-thought   /ar/research/state-role-economic-thought   301
+/en/articles/state-role-economic-thought   /en/research/state-role-economic-thought   301
+/ar/articles/tunisia-economic-development   /ar/research/tunisia-economic-development   301
+/en/articles/tunisia-economic-development   /en/research/tunisia-economic-development   301
+/ar/articles/wages-unemployment-palestine   /ar/research/wages-unemployment-palestine   301
+/en/articles/wages-unemployment-palestine   /en/research/wages-unemployment-palestine   301
+/ar/articles/youth-unemployment-sme-palestine   /ar/research/youth-unemployment-sme-palestine   301
+/en/articles/youth-unemployment-sme-palestine   /en/research/youth-unemployment-sme-palestine   301
