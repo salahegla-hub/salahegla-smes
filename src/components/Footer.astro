@@ -6,15 +6,17 @@ export interface Props {
 const { locale } = Astro.props;
 const t = useT(locale);
 const year = new Date().getFullYear();
+/* Labels resolved here (not by key in the template) so the readings section can
+   carry a literal label without touching ui.ts — same pattern as the header. */
 const nav = [
-  { key: 'nav.about', to: 'about' },
-  { key: 'nav.research', to: 'research' },
-  { key: 'nav.articles', to: 'articles' },
-  { key: 'nav.projects', to: 'projects' },
-  { key: 'nav.contact', to: 'contact' },
+  { label: t('nav.about'), to: 'about' },
+  { label: t('nav.research'), to: 'research' },
+  { label: t('nav.articles'), to: 'articles' },
+  { label: locale === 'ar' ? 'قراءات نقدية' : 'Critical readings', to: 'readings' },
+  { label: t('nav.projects'), to: 'projects' },
+  { label: t('nav.contact'), to: 'contact' },
 ] as const;
 ---
-
 <footer class="site-footer">
   <div class="wrap ft">
     <div class="ft__brand">
@@ -22,14 +24,12 @@ const nav = [
       <span class="ft__sub">{SITE.tagEn}</span>
       <p class="ft__note">{t('foot.legalNote')}</p>
     </div>
-
     <nav class="ft__col" aria-label={t('foot.nav')}>
       <h2 class="ft__h">{t('foot.nav')}</h2>
-      {nav.map((n) => <a href={rel(locale, n.to)}>{t(n.key)}</a>)}
+      {nav.map((n) => <a href={rel(locale, n.to)}>{n.label}</a>)}
       <a href={rel(locale, 'privacy')}>{t('foot.privacy')}</a>
       <a href={`/${locale}/rss.xml`} class="ltr">RSS</a>
     </nav>
-
     <div class="ft__col">
       <h2 class="ft__h">{t('foot.contact')}</h2>
       <a href={`mailto:${SITE.email}`} class="ltr">{SITE.email}</a>
@@ -38,12 +38,10 @@ const nav = [
       <span class="ft__city">{locale === 'ar' ? SITE.cityAr : SITE.cityEn}</span>
     </div>
   </div>
-
   <div class="wrap ft__bar">
     <span>© {year} {locale === 'ar' ? SITE.nameAr : SITE.nameEn} — {t('foot.rights')}</span>
   </div>
 </footer>
-
 <style>
   .site-footer {
     background: var(--navy);
