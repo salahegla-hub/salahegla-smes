@@ -4,6 +4,11 @@
    ============================================================ */
 .prose{max-width:var(--measure);color:#2C3A40;font-size:clamp(16.5px,.35vw + 16px,18px);line-height:2}
 html[lang="en"] .prose{line-height:1.78}
+/* Arabic body copy reads in IBM Plex Sans Arabic (taller metrics carry their
+   own leading, hence 1.9 instead of Tajawal's 2). Headings inside articles
+   stay Tajawal so the brand voice is unchanged. */
+html[dir="rtl"] .prose{font-family:var(--font-ar-prose);line-height:1.9}
+html[dir="rtl"] .prose h1,html[dir="rtl"] .prose h2,html[dir="rtl"] .prose h3,html[dir="rtl"] .prose h4{font-family:var(--font-ar)}
 
 .prose > * + *{margin-block-start:1.15em}
 .prose h2,.prose h3,.prose h4{color:var(--navy);scroll-margin-top:96px}
