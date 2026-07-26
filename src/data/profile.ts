@@ -173,9 +173,9 @@ export const CREDENTIALS: { value: string; label: Bi; note: Bi }[] = [
     note: { ar: 'خصوصًا في القطاعين الصناعي والزراعي', en: 'primarily in the industrial and agricultural sectors' },
   },
   {
-    value: '1',
+    value: '2025',
     label: { ar: 'بحث محكَّم منشور', en: 'peer-reviewed publication' },
-    note: { ar: 'مجلة عُمران — المركز العربي للأبحاث ودراسة السياسات', en: 'Omran Journal — Arab Center for Research and Policy Studies' },
+    note: { ar: 'مجلة عُمران، العدد 53 — المركز العربي للأبحاث ودراسة السياسات', en: 'Omran Journal, Issue 53 — Arab Center for Research and Policy Studies' },
   },
   {
     value: '+14',
