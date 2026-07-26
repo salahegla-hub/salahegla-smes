@@ -21,7 +21,6 @@ const nav = [
   { label: t('nav.articles'), to: 'articles' },
   { label: locale === 'ar' ? 'قراءات نقدية' : 'Critical readings', to: 'readings' },
   { label: t('nav.projects'), to: 'projects' },
-  { label: t('nav.contact'), to: 'contact' },
 ] as const;
 
 const isActive = (to: string) => (to === '' ? current === '' : current === to || current.startsWith(to + '/'));
@@ -36,11 +35,12 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
   <div class="hd">
     <a class="brand" href={rel(locale)}>
       <span class="brand__mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="19" height="19" fill="none">
-          <path d="M4 19V9.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
-          <path d="M12 19V4.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
-          <path d="M20 19V13" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
-          <path d="M3.5 12.5L11 6.2a1 1 0 0 1 1.2-.05L14 7.5a1 1 0 0 0 1.2-.05l5.3-4.4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+        <svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="currentColor" stroke-linecap="round">
+          <circle cx="13.2" cy="10.2" r="6.6" stroke-width="2" />
+          <path d="M8.5 14.9L4.6 18.8" stroke-width="2.2" />
+          <path d="M10.6 13.1V11.6" stroke-width="1.9" />
+          <path d="M13.2 13.1V8.9" stroke-width="1.9" />
+          <path d="M15.8 13.1V7.9" stroke-width="1.9" />
         </svg>
       </span>
       <span class="brand__txt">
@@ -124,11 +124,9 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
     min-width: 0;
   }
   .brand__mark {
-    width: 38px;
-    height: 38px;
-    border-radius: 9px;
-    background: var(--gold);
-    color: var(--navy);
+    width: 40px;
+    height: 40px;
+    color: var(--gold);
     display: grid;
     place-items: center;
     flex: none;
@@ -300,9 +298,9 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
     justify-content: center;
   }
 
-  /* Seven sections no longer fit beside the brand and CTA at 1080px, so the
-     drawer now takes over earlier to avoid a wrapping nav row. */
-  @media (max-width: 1200px) {
+  /* Six nav items fit beside the brand and CTA down to ~1080px; below that
+     the drawer takes over. */
+  @media (max-width: 1080px) {
     .nav-d {
       display: none;
     }
@@ -347,6 +345,6 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
       }
     });
     // Reset when resizing up to the desktop breakpoint
-    window.matchMedia('(min-width: 1201px)').addEventListener('change', (e) => e.matches && setOpen(false));
+    window.matchMedia('(min-width: 1081px)').addEventListener('change', (e) => e.matches && setOpen(false));
   }
 </script>
