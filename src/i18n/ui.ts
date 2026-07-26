@@ -380,13 +380,14 @@ export function otherLocale(locale: Locale): Locale {
   return locale === 'ar' ? 'en' : 'ar';
 }
 
-/** Format a date in the reader's language. */
+/** Format a date in the reader's language. Month + year only: content dates
+ *  are month-precision, so printing a day would state precision the data
+ *  does not have. Per-entry `displayDate` still overrides this entirely. */
 export function fmtDate(d: Date | string, locale: Locale): string {
   const date = typeof d === 'string' ? new Date(d) : d;
   return new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en-GB', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric',
   }).format(date);
 }
 
