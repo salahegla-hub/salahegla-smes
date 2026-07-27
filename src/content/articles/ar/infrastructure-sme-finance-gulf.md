@@ -7,7 +7,7 @@ translationKey: "infrastructure-sme-finance-gulf"
 excerpt: "القيد المُلزِم أمام تمويل المشاريع الصغيرة في الخليج معلوماتيٌّ ومؤسسي لا رأسمالي. ورقة عمل تقترح أربع ركائز تحتية مترابطة لتحويل وفرة رأس المال إلى ائتمانٍ مُنتِج، مع مراجعة نقدية للأدلة الدولية وخريطة طريق قابلة للقياس."
 category: "economics-policy"
 tags: ["اقتصادات الخليج", "البنية التحتية الائتمانية", "المصرفية المفتوحة", "الهوية الرقمية", "التمويل المُنتِج", "قطر"]
-contentType: "article"
+contentType: "working-paper"
 status: "published"
 peerReviewed: false
 author: "صلاح الدين مازن العجلة"
