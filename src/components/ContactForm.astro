@@ -231,7 +231,11 @@ const subjects = ar
       status.hidden = true;
       try {
         const body = new URLSearchParams(new FormData(form) as any).toString();
-        const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        // POST to this page, not to "/". The site root redirects to /ar/, and a
+        // redirect is applied before Netlify's form handler runs — so posting to
+        // "/" returns a healthy 200 from the redirect target while the submission
+        // is silently dropped. Any real page path reaches the handler directly.
+        const res = await fetch(window.location.pathname, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
         if (!res.ok) throw new Error(String(res.status));
         form.reset();
         status.dataset.state = 'ok';
