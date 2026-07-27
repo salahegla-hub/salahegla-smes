@@ -7,7 +7,7 @@ translationKey: "infrastructure-sme-finance-gulf"
 excerpt: "The binding constraint on SME lending in the Gulf is informational and institutional, not a shortage of capital. This working paper sets out four interlocking infrastructure pillars that turn abundant liquidity into productive credit, reviews the international evidence critically, and proposes a measurable roadmap."
 category: "economics-policy"
 tags: ["Gulf economies", "Credit infrastructure", "Open banking", "Digital identity", "Productive finance", "Qatar"]
-contentType: "article"
+contentType: "working-paper"
 status: "published"
 peerReviewed: false
 author: "Salah Eldin Mazen Al-Ajla"
