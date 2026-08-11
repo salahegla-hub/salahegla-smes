@@ -16,6 +16,7 @@ const mins = readingTime(entry.body ?? '');
   <div class="acard__tags">
     <span class="pill pill--muted">{TYPE_LABELS[d.contentType][locale]}</span>
     {d.peerReviewed && <span class="pill pill--gold">{locale === 'ar' ? 'محكَّم ومنشور' : 'Peer-reviewed'}</span>}
+    {d.publishedIn && !d.peerReviewed && <span class="pill pill--gold">{locale === 'ar' ? 'منشور' : 'Published'}</span>}
     {d.featured && !d.peerReviewed && <span class="pill">{t('articles.featured')}</span>}
     {soon && <span class="pill pill--muted">{t('articles.comingSoon')}</span>}
   </div>
