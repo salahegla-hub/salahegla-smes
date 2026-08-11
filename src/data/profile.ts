@@ -95,6 +95,13 @@ export const EXPERIENCE: Role[] = [
 export const PUBLISHED: { title: Bi; where: Bi }[] = [
   {
     title: {
+      ar: 'القيد التجاري لنقطة الاختناق: التأمين وأمن الخليج بعد صدمة مضيق هرمز 2026',
+      en: 'The Chokepoint’s Commercial Bind: Insurance and Gulf Security after the 2026 Strait of Hormuz Shock',
+    },
+    where: { ar: 'تحليلات اقتصادية — المركز العربي للأبحاث ودراسة السياسات، أغسطس 2026', en: 'Economic Analyses — Arab Center for Research and Policy Studies, August 2026' },
+  },
+  {
+    title: {
       ar: 'تداعيات العدوان الإسرائيلي على الاقتصاد الفلسطيني في قطاع غزة وتحديات التعافي الاقتصادي',
       en: 'The Impact of the Israeli War on the Palestinian Economy in the Gaza Strip: The Challenges of Economic Recovery',
     },
@@ -146,7 +153,7 @@ export const EXPERTISE: { icon: string; title: Bi; text: Bi }[] = [
   {
     icon: 'research',
     title: { ar: 'البحث الاقتصادي والقياسي', en: 'Economic & econometric research' },
-    text: { ar: 'بحث محكَّم منشور و14 ورقة عمل، وتحليل قياسي بـSTATA وتدريب طلبة الدراسات العليا عليه.', en: 'A peer-reviewed publication, 14 working papers, econometric analysis in STATA and teaching it at postgraduate level.' },
+    text: { ar: 'بحث محكَّم وتحليل اقتصادي منشوران لدى المركز العربي، و14 ورقة عمل، وتحليل قياسي بـSTATA وتدريب طلبة الدراسات العليا عليه.', en: 'A peer-reviewed publication and a published economic analysis with the Arab Center, 14 working papers, econometric analysis in STATA and teaching it at postgraduate level.' },
   },
   {
     icon: 'monitoring',
@@ -178,6 +185,11 @@ export const CREDENTIALS: { value: string; label: Bi; note: Bi }[] = [
     note: { ar: 'مجلة عُمران، العدد 53 — المركز العربي للأبحاث ودراسة السياسات', en: 'Omran Journal, Issue 53 — Arab Center for Research and Policy Studies' },
   },
   {
+    value: '2026',
+    label: { ar: 'تحليل اقتصادي منشور', en: 'published economic analysis' },
+    note: { ar: 'سلسلة تحليلات اقتصادية — المركز العربي للأبحاث ودراسة السياسات', en: 'Economic Analyses series — Arab Center for Research and Policy Studies' },
+  },
+  {
     value: '+14',
     label: { ar: 'ورقة عمل بحثية', en: 'research working papers' },
     note: { ar: 'معهد الدوحة للدراسات العليا، 2021–2025', en: 'Doha Institute for Graduate Studies, 2021–2025' },
@@ -185,8 +197,8 @@ export const CREDENTIALS: { value: string; label: Bi; note: Bi }[] = [
 ];
 
 export const BIO: Bi = {
-  ar: 'باحث اقتصادي مقيم في الدوحة، متخصّص في تمويل التنمية وتمويل المنشآت الصغيرة والمتوسطة، ومرشّح لدرجة الدكتوراه في اقتصاديات التنمية بمعهد الدوحة للدراسات العليا. عملتُ نحو عشر سنوات في تمويل المنشآت الصغيرة والمتوسطة والتحليل الائتماني في مؤسسة «فاتن»، أدرتُ خلالها محفظة إقراض بقيمة 10 ملايين دولار وأعددتُ أكثر من 140 تحليلًا ائتمانيًا وماليًا — وهي سنوات قضيتها في الجانب الذي يُقيّم الطلبات لا الذي يقدّمها — وهذا ما يشكّل زاويتي في العمل حتى اليوم. أعمل حاليًا باحثًا إحصائيًا في قسم التقييم والجودة، وأُدرّس المهارات البحثية الكمّية لطلبة الدراسات العليا. اهتمامي البحثي يتركّز حول سؤال واحد: لماذا لا يصل التمويل إلى المنشآت التي تستحقه، وما البنية التي تجعله يصل.',
-  en: 'I am an economic researcher based in Doha specialising in development finance and SME finance, and a PhD candidate in development economics at the Doha Institute for Graduate Studies. I spent close to a decade in SME finance and credit analysis at FATEN, where I managed a US$10 million lending portfolio and delivered more than 140 credit and financial analyses — years spent on the side that assesses applications rather than the side that submits them, which still shapes how I approach the work. I currently work as a statistical researcher in an evaluation and quality department, and teach quantitative research methods to postgraduate students. My research centres on a single question: why finance fails to reach the firms that merit it, and what infrastructure makes it reach them.',
+  ar: 'باحث اقتصادي مقيم في الدوحة، متخصّص في تمويل التنمية وتمويل المنشآت الصغيرة والمتوسطة، ومرشّح لدرجة الدكتوراه في اقتصاديات التنمية بمعهد الدوحة للدراسات العليا. عملتُ نحو عشر سنوات في تمويل المنشآت الصغيرة والمتوسطة والتحليل الائتماني في مؤسسة «فاتن»، أدرتُ خلالها محفظة إقراض بقيمة 10 ملايين دولار وأعددتُ أكثر من 140 تحليلًا ائتمانيًا وماليًا — وهي سنوات قضيتها في الجانب الذي يُقيّم الطلبات لا الذي يقدّمها — وهذا ما يشكّل زاويتي في العمل حتى اليوم. أعمل حاليًا باحثًا إحصائيًا في قسم التقييم والجودة، وأُدرّس المهارات البحثية الكمّية لطلبة الدراسات العليا. نُشر لي بحث محكَّم في مجلة عُمران وتحليل اقتصادي ضمن سلسلة «تحليلات اقتصادية»، وكلاهما لدى المركز العربي للأبحاث ودراسة السياسات. اهتمامي البحثي يتركّز حول سؤال واحد: لماذا لا يصل التمويل إلى المنشآت التي تستحقه، وما البنية التي تجعله يصل.',
+  en: 'I am an economic researcher based in Doha specialising in development finance and SME finance, and a PhD candidate in development economics at the Doha Institute for Graduate Studies. I spent close to a decade in SME finance and credit analysis at FATEN, where I managed a US$10 million lending portfolio and delivered more than 140 credit and financial analyses — years spent on the side that assesses applications rather than the side that submits them, which still shapes how I approach the work. I currently work as a statistical researcher in an evaluation and quality department, and teach quantitative research methods to postgraduate students. My published work includes a peer-reviewed article in Omran Journal and an economic analysis in the Economic Analyses series, both with the Arab Center for Research and Policy Studies. My research centres on a single question: why finance fails to reach the firms that merit it, and what infrastructure makes it reach them.',
 };
 
 export const METHOD: { title: Bi; text: Bi }[] = [
