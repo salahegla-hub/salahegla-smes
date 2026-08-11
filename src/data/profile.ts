@@ -129,6 +129,7 @@ export const WORKING_PAPERS: { title: Bi; date: Bi }[] = [
 
 export const CERTS: { title: Bi; org: Bi; date: Bi }[] = [
   { title: { ar: 'محترف إدارة المشاريع (PMP)', en: 'Project Management Professional (PMP)' }, org: { ar: 'معهد إدارة المشاريع (PMI) · أكاديمية قطر للمال والأعمال — 35 ساعة', en: 'Project Management Institute (PMI) · Qatar Finance & Business Academy — 35 hours' }, date: { ar: '2026', en: '2026' } },
+  { title: { ar: 'دراسات الجدوى الاقتصادية وتقييم المشروعات', en: 'Economic Feasibility Study & Project Evaluation' }, org: { ar: 'IBS Training Academy — 12 ساعة', en: 'IBS Training Academy — 12 hours' }, date: { ar: 'أغسطس 2026', en: 'August 2026' } },
   { title: { ar: 'المحترف المعتمد في مؤشرات الأداء الرئيسية (Certified KPI Professional)', en: 'Certified KPI Professional' }, org: { ar: 'The KPI Institute — 40 ساعة', en: 'The KPI Institute — 40 hours' }, date: { ar: 'نوفمبر 2025', en: 'November 2025' } },
   { title: { ar: 'محلل النمذجة المالية والتقييم (FMVA) — قيد الاستكمال', en: 'Financial Modeling & Valuation Analyst (FMVA) — in progress' }, org: { ar: 'CFI Education Inc.', en: 'CFI Education Inc.' }, date: { ar: 'من مايو 2024', en: 'from May 2024' } },
   { title: { ar: 'معسكر تدريبي في تحليل البيانات: Python وExcel وPower BI', en: 'Data analysis bootcamp: Python, Excel and Power BI' }, org: { ar: 'Assal Education', en: 'Assal Education' }, date: { ar: 'مايو — سبتمبر 2024', en: 'May — September 2024' } },
