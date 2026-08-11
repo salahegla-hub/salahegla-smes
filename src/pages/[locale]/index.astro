@@ -7,6 +7,7 @@ import Newsletter from '../../components/Newsletter.astro';
 import { useT, rel, fmtDate, LOCALES, SITE, type Locale } from '../../i18n/ui';
 import { getArticles, getProjects } from '../../lib/content';
 import { EXPERTISE, CREDENTIALS } from '../../data/profile';
+import { sectionOf } from '../../content.config';
 
 export function getStaticPaths() {
   return LOCALES.map((locale) => ({ params: { locale } }));
@@ -16,7 +17,7 @@ const locale = Astro.params.locale as Locale;
 const t = useT(locale);
 const L = (b: { ar: string; en: string }) => b[locale];
 
-/* The homepage feed merges BOTH sections and sorts purely by date, so the
+/* The homepage feed merges ALL THREE sections and sorts purely by date, so the
    newest thing published always surfaces first regardless of its type.
    This keeps the front page current with zero manual maintenance. */
 const [researchPapers, generalArticles, readings, projects] = await Promise.all([
@@ -55,6 +56,14 @@ function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): stri
   const hit = data.contentType ? map[data.contentType] : undefined;
   return hit ? hit[locale] : locale === 'ar' ? 'منشور' : 'Publication';
 }
+
+/** Section-aware link for the pinned card. Every content type lives under its
+ *  own route (research / articles / readings), so the href must be derived
+ *  from the entry's section — a hardcoded `articles/` path 404s for research
+ *  papers and readings. `sectionOf` is the single source of truth here. */
+const featuredHref = featured
+  ? rel(locale, `${sectionOf(featured.data.contentType)}/${featured.data.slug}`)
+  : '';
 ---
 
 <Base
@@ -104,7 +113,7 @@ function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): stri
     featured && (
       <section class="section featsec">
         <div class="wrap">
-          <a class="feat" href={rel(locale, `articles/${featured.data.slug}`)}>
+          <a class="feat" href={featuredHref}>
             <div class="feat__meta">
               <span class="feat__flag">{locale === 'ar' ? 'آخر ما نُشر' : 'Latest'}</span>
               <span class="feat__type">{typeLabel(featured.data)}</span>
@@ -148,7 +157,7 @@ function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): stri
     </div>
   </section>
 
-  <!-- ============ LATEST PUBLICATIONS (research + articles merged) ============ -->
+  <!-- ============ LATEST PUBLICATIONS (research + articles + readings merged) ============ -->
   <section class="section section--tint">
     <div class="wrap">
       <div class="shead">
@@ -400,7 +409,7 @@ function typeLabel(data: { contentType?: string; peerReviewed?: boolean }): stri
   .more-row {
     margin-block-start: clamp(22px, 3vw, 32px);
   }
-  /* two browse buttons side by side, wrapping on narrow screens */
+  /* browse buttons side by side, wrapping on narrow screens */
   .more-row--split {
     display: flex;
     flex-wrap: wrap;
