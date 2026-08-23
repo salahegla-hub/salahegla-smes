@@ -7,7 +7,12 @@
 /* ---------- Self-hosted fonts (font-display: swap) ---------- */
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:"Tajawal";src:url("/fonts/tajawal-700.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+/* Weight 600 previously pointed at the 700 file, so every semibold element
+   (h3/h4, buttons, pills, labels, <strong>) rendered fully bold and the
+   semibold tier disappeared. The src list below tries a real 600 file first
+   and falls back to the 700 file if it hasn't been uploaded yet — so this is
+   safe to ship now and upgrades on its own once /fonts/tajawal-600.woff2 exists. */
+@font-face{font-family:"Tajawal";src:url("/fonts/tajawal-600.woff2") format("woff2"),url("/fonts/tajawal-700.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-800.woff2") format("woff2");font-weight:800;font-style:normal;font-display:swap}
 @font-face{font-family:"IBM Plex Sans";src:url("/fonts/plex-en-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
@@ -44,6 +49,10 @@
      invisible if the file ever fails to load. UI/headings keep --font-ar. */
   --font-ar-prose:"IBM Plex Sans Arabic","Tajawal","Segoe UI",Tahoma,system-ui,sans-serif;
   --lh-ar:1.95;
+  /* Interface line-height: 1.95 is tuned for long-form reading and makes
+     compact UI (cards, buttons, meta rows, pills) look loose and unanchored.
+     Components opt into this tighter value; .prose keeps the reading rhythm. */
+  --lh-ui:1.7;
   --lh-en:1.7;
 
   /* ---- Spacing & layout ---- */
@@ -116,9 +125,13 @@ p{text-wrap:pretty}
 .shead{max-width:70ch;margin-block-end:clamp(28px,4vw,44px)}
 .shead__eyebrow{
   display:inline-flex;align-items:center;gap:9px;
-  color:var(--gold-dark);font-size:.82rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;margin-block-end:10px;
+  color:var(--gold-dark);font-size:.82rem;font-weight:600;
+  margin-block-end:10px;
 }
+/* Arabic script is cursive: letter-spacing pulls the joins apart and makes
+   the word look broken, while text-transform does nothing at all. Both are
+   applied to the Latin side only. */
+html[lang="en"] .shead__eyebrow{letter-spacing:.08em;text-transform:uppercase}
 .shead__eyebrow::before{content:"";width:22px;height:2px;background:var(--gold);flex:none}
 .shead h2{margin-block-end:10px}
 .shead p{color:var(--text-3);font-size:1.02rem}
@@ -126,6 +139,7 @@ p{text-wrap:pretty}
 /* ---------- Buttons ---------- */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  line-height:var(--lh-ui);
   min-height:48px;padding:12px 26px;border-radius:var(--r-sm);
   font-weight:600;font-size:1rem;text-decoration:none;cursor:pointer;
   border:1.5px solid transparent;transition:background .18s,border-color .18s,color .18s,transform .18s;
@@ -152,34 +166,32 @@ p{text-wrap:pretty}
 a.card,.card--link{text-decoration:none;color:inherit}
 a.card:hover,.card--link:hover{border-color:var(--teal);box-shadow:var(--shadow);transform:translateY(-2px)}
 .card h3{margin-block-end:8px}
-.card p{color:var(--text-3);font-size:.96rem}
+.card p{color:var(--text-3);font-size:.96rem;line-height:var(--lh-ui)}
 .card__foot{margin-block-start:auto;padding-block-start:16px}
 
 /* ---------- Pills / meta ---------- */
 .pill{
   display:inline-flex;align-items:center;gap:6px;
+  line-height:var(--lh-ui);
   font-size:.78rem;font-weight:600;padding:5px 11px;border-radius:999px;
   background:var(--teal-tint);color:var(--teal-dark);border:1px solid transparent;
 }
 .pill--gold{background:var(--gold-tint);color:var(--gold-dark)}
 .pill--navy{background:var(--navy);color:#fff}
 .pill--muted{background:var(--bg);color:var(--text-3);border-color:var(--line)}
-.meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--text-3);font-size:.88rem;align-items:center}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--text-3);font-size:.88rem;align-items:center;line-height:var(--lh-ui)}
 .meta span{display:inline-flex;align-items:center;gap:6px}
 .meta svg{width:15px;height:15px;stroke:var(--teal);fill:none;stroke-width:1.7;flex:none}
 
 /* ---------- Forms ---------- */
 .field{display:flex;flex-direction:column;gap:7px;margin-block-end:16px}
-.field label{font-weight:600;font-size:.92rem;color:var(--navy)}
+.field label{font-weight:600;font-size:.92rem;color:var(--navy);line-height:var(--lh-ui)}
 .field .hint{font-size:.82rem;color:var(--text-3);font-weight:400}
 /* Flex/grid children default to min-width:auto, which lets an input's
    intrinsic width push a row wider than its container. */
 .field,.grid > *{min-width:0}
-/* Flex/grid children default to min-width:auto, which lets an input's
-   intrinsic width push a row wider than its container. */
-.field,.grid > *{min-width:0}
 .field input,.field select,.field textarea{
-  width:100%;max-width:100%;min-width:0;max-width:100%;min-width:0;min-height:48px;padding:12px 14px;
+  width:100%;max-width:100%;min-width:0;min-height:48px;padding:12px 14px;
   background:var(--card);border:1.5px solid var(--line);border-radius:var(--r-sm);
   color:var(--text);transition:border-color .15s,box-shadow .15s;
 }
