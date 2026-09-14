@@ -13,11 +13,16 @@ const Tag = href ? 'a' : 'div';
 const mins = readingTime(entry.body ?? '');
 ---
 <Tag class:list={['card acard', { 'is-soon': soon }]} href={href} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+  <!-- At most two badges. A grid of twenty cards each wearing three pills
+       reads as texture, not as information: when everything is flagged,
+       nothing is. Only the two that change how the reader weighs the item
+       stay up here — what it is, and whether it was peer-reviewed. "Featured"
+       is ordering, not a property of the work (featured items already sort
+       first), and the journal name says more than a generic "Published"
+       badge, so it moved down into the meta row as text. -->
   <div class="acard__tags">
     <span class="pill pill--muted">{TYPE_LABELS[d.contentType][locale]}</span>
     {d.peerReviewed && <span class="pill pill--gold">{locale === 'ar' ? 'محكَّم ومنشور' : 'Peer-reviewed'}</span>}
-    {d.publishedIn && !d.peerReviewed && <span class="pill pill--gold">{locale === 'ar' ? 'منشور' : 'Published'}</span>}
-    {d.featured && !d.peerReviewed && <span class="pill">{t('articles.featured')}</span>}
     {soon && <span class="pill pill--muted">{t('articles.comingSoon')}</span>}
   </div>
   <h3>{d.title}</h3>
@@ -28,6 +33,8 @@ const mins = readingTime(entry.body ?? '');
       <span><time datetime={d.publishDate.toISOString()}>{d.displayDate ?? fmtDate(d.publishDate, locale)}</time></span>
       {!soon && !d.externalUrl && <span>{mins} {t('articles.readingTime')}</span>}
     </div>
+    {/* Skipped when the link is external — the CTA below already carries it. */}
+    {d.publishedIn && !d.peerReviewed && !external && <p class="acard__where">{d.publishedIn}</p>}
     {soon
       ? <span class="acard__soon">{t('articles.comingSoonNote')}</span>
       : <span class="acard__go">{external ? (d.publishedIn ?? t('articles.readMore')) : t('articles.readMore')}
@@ -39,6 +46,7 @@ const mins = readingTime(entry.body ?? '');
   .acard__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-block-end: 12px }
   .acard h3 { line-height: 1.45 }
   .acard.is-soon { opacity: .82; background: #FBFAF7 }
+  .acard__where { margin-block-start: 8px; color: var(--gold-dark); font-size: .84rem; font-weight: 500; line-height: var(--lh-ui) }
   .acard__go { display: inline-flex; align-items: center; gap: 7px; margin-block-start: 12px; color: var(--teal-dark); font-weight: 600; font-size: .92rem }
   .acard__go svg { width: 16px; height: 16px }
   :global([dir='rtl']) .acard__go svg { transform: scaleX(-1) }

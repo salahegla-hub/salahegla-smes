@@ -7,12 +7,13 @@
 /* ---------- Self-hosted fonts (font-display: swap) ---------- */
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
-/* Weight 600 previously pointed at the 700 file, so every semibold element
-   (h3/h4, buttons, pills, labels, <strong>) rendered fully bold and the
-   semibold tier disappeared. The src list below tries a real 600 file first
-   and falls back to the 700 file if it hasn't been uploaded yet — so this is
-   safe to ship now and upgrades on its own once /fonts/tajawal-600.woff2 exists. */
-@font-face{font-family:"Tajawal";src:url("/fonts/tajawal-600.woff2") format("woff2"),url("/fonts/tajawal-700.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+/* Tajawal HAS NO 600 WEIGHT. The family ships 200/300/400/500/700/800/900 —
+   there is no semibold to upload, so the /fonts/tajawal-600.woff2 this rule
+   used to try first could only ever 404 and cost a wasted round-trip on every
+   page. Weight 600 therefore maps to 700 by design, and the middle tier is
+   restored further down by giving Arabic h3/h4 the real middle weight, 500.
+   (The Latin stack is unaffected: IBM Plex Sans does ship a true 600.) */
+@font-face{font-family:"Tajawal";src:url("/fonts/tajawal-700.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:"Tajawal";src:url("/fonts/tajawal-800.woff2") format("woff2");font-weight:800;font-style:normal;font-display:swap}
 @font-face{font-family:"IBM Plex Sans";src:url("/fonts/plex-en-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
@@ -58,6 +59,13 @@
   /* ---- Spacing & layout ---- */
   --wrap:1160px;
   --measure:760px;          /* long-form reading width, brief §7 */
+  /* Article shell: the reading column keeps --measure at every width. These
+     two only add the desktop contents column beside it, so the article body
+     stays exactly as wide as before wherever the sidebar is not shown. */
+  --article:calc(var(--measure) + 80px);
+  --toc-col:250px;
+  --toc-gap:44px;
+  --sticky-top:88px;        /* clears the sticky header; matches scroll-padding */
   --r-sm:8px; --r:12px; --r-lg:18px;
   --sp-section:clamp(56px,7vw,92px);
   --shadow-sm:0 1px 2px rgba(11,31,51,.06),0 2px 8px rgba(11,31,51,.04);
@@ -68,7 +76,7 @@
 /* ---------- Reset ---------- */
 *,*::before,*::after{box-sizing:border-box}
 *{margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:88px}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:var(--sticky-top)}
 body{
   background:var(--bg);color:var(--text);
   font-family:var(--font-ar);
@@ -110,6 +118,11 @@ h1{font-size:clamp(28px,1.6vw + 24px,44px)}
 h2{font-size:clamp(23px,1vw + 20px,33px)}
 h3{font-size:clamp(19px,.5vw + 17px,23px);font-weight:600}
 h4{font-size:clamp(17px,.3vw + 16px,19px);font-weight:600}
+/* Arabic has no 600 to fall back on (see the @font-face note above), so a 600
+   sub-heading renders exactly as bold as an h1 and the hierarchy flattens to a
+   single weight. 500 is the real middle tier in Tajawal; size still separates
+   h3 from h4. Latin keeps 600 — Plex ships it. */
+html[lang="ar"] h3,html[lang="ar"] h4{font-weight:500}
 p{text-wrap:pretty}
 
 /* ---------- Layout helpers ---------- */
@@ -226,7 +239,7 @@ a.card:hover,.card--link:hover{border-color:var(--teal);box-shadow:var(--shadow)
 
 /* ---------- Print ---------- */
 @media print{
-  .site-header,.site-footer,.toc,.article-cta,.share,.skip,.breadcrumbs{display:none!important}
+  .site-header,.site-footer,.toc,.a-side,.article-cta,.share,.skip,.breadcrumbs{display:none!important}
   body{background:#fff;font-size:11pt}
   .prose{max-width:none}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt;color:#555}

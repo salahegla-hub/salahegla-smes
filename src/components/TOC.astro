@@ -1,11 +1,12 @@
 ---
 import { useT, type Locale } from '../i18n/ui';
-export interface Props { locale: Locale; headings: { depth: number; slug: string; text: string }[] }
+import { tocItems, hasTOC, type Heading } from '../lib/toc';
+export interface Props { locale: Locale; headings: Heading[] }
 const { locale, headings } = Astro.props;
 const t = useT(locale);
-const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const items = tocItems(headings);
 ---
-{items.length >= 3 && (
+{hasTOC(headings) && (
   <nav class="toc" aria-labelledby="toc-h">
     <h2 class="toc__h" id="toc-h">{t('articles.toc')}</h2>
     <ol>

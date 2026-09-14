@@ -10,6 +10,7 @@ import '../../../styles/prose.css';
 import { useT, rel, fmtDate, readingTime, SITE, type Locale } from '../../../i18n/ui';
 import { CATEGORY_LABELS, TYPE_LABELS, sectionOf } from '../../../content.config';
 import { resolveRelatedArticles, translatedSlug } from '../../../lib/content';
+import { hasTOC } from '../../../lib/toc';
 
 export async function getStaticPaths() {
   // "coming-soon" entries deliberately get no page — cards link nowhere (§8.4)
@@ -23,6 +24,8 @@ const t = useT(locale);
 const d = entry.data;
 const { Content, headings } = await render(entry);
 const mins = readingTime(entry.body ?? '');
+/* Decides the desktop grid: no contents, no side column (and no empty gutter). */
+const withTOC = hasTOC(headings);
 
 const [related, altSlug] = await Promise.all([
   resolveRelatedArticles(d.relatedArticles, locale, d.translationKey),
@@ -97,28 +100,34 @@ const schema = [
         <button type="button" class="btn btn--outline btn--sm" id="print-btn"><Icon name="print" />{t('articles.print')}</button>
       </div>
 
-      <TOC locale={locale} headings={headings} />
+      <div class:list={['a-layout', { 'a-layout--toc': withTOC }]}>
+        {withTOC && (
+          <aside class="a-side"><TOC locale={locale} headings={headings} /></aside>
+        )}
 
-      <div class="prose">
-        <Content />
-      </div>
+        <div class="a-main">
+          <div class="prose">
+            <Content />
+          </div>
 
-      {d.references.length > 0 && (
-        <section class="a-refs">
-          <h2>{t('articles.references')}</h2>
-          <ol>{d.references.map((r) => <li>{r}</li>)}</ol>
-        </section>
-      )}
+          {d.references.length > 0 && (
+            <section class="a-refs">
+              <h2>{t('articles.references')}</h2>
+              <ol>{d.references.map((r) => <li>{r}</li>)}</ol>
+            </section>
+          )}
 
-      {d.tags.length > 0 && (
-        <div class="a-tags">
-          {d.tags.map((tag) => <span class="pill pill--muted">{tag}</span>)}
+          {d.tags.length > 0 && (
+            <div class="a-tags">
+              {d.tags.map((tag) => <span class="pill pill--muted">{tag}</span>)}
+            </div>
+          )}
+
+          <p class="a-back">
+            <a class="btn btn--outline" href={rel(locale, 'articles')}>← {t('articles.backToAll')}</a>
+          </p>
         </div>
-      )}
-
-      <p class="a-back">
-        <a class="btn btn--outline" href={rel(locale, 'articles')}>← {t('articles.backToAll')}</a>
-      </p>
+      </div>
     </div>
 
     <div class="wrap a-foot">
@@ -143,7 +152,7 @@ const schema = [
     padding-block: clamp(30px, 4vw, 50px);
   }
   .a-hero__in {
-    max-width: calc(var(--measure) + 80px);
+    max-width: var(--article);
   }
   .a-hero__tags {
     display: flex;
@@ -180,7 +189,7 @@ const schema = [
   }
 
   .a-body {
-    max-width: calc(var(--measure) + 80px);
+    max-width: var(--article);
     padding-block: clamp(28px, 4vw, 42px);
   }
   .a-actions {
@@ -228,6 +237,46 @@ const schema = [
   }
   .a-rel h2 {
     margin-block-end: 18px;
+  }
+
+  /* ---- desktop: the contents move into a sticky side column ----
+     A long piece earns a list that travels with the reader. Widening the hero
+     by the same amount keeps the headline and the text column on one start
+     edge. Below 1100px none of this applies and the TOC stays exactly where it
+     was — a box above the text. */
+  @media (min-width: 1100px) {
+    .a-hero__in,
+    .a-body {
+      max-width: calc(var(--article) + var(--toc-col) + var(--toc-gap));
+    }
+    .a-hero h1 {
+      max-width: 26ch;
+    }
+    .a-hero__sub {
+      max-width: 58ch;
+    }
+    .a-layout--toc {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--toc-col);
+      gap: var(--toc-gap);
+      align-items: start;
+    }
+    /* Explicit placement: the aside leads in the DOM so it keeps its reading
+       order on mobile and for screen readers, but sits in the outer column. */
+    .a-layout--toc > .a-main {
+      grid-area: 1 / 1;
+    }
+    .a-layout--toc > .a-side {
+      grid-area: 1 / 2;
+      position: sticky;
+      inset-block-start: var(--sticky-top);
+      max-height: calc(100vh - var(--sticky-top) - 24px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .a-side :global(.toc) {
+      margin-block-end: 0;
+    }
   }
 </style>
 
