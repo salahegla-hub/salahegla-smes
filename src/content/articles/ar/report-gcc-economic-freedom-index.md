@@ -8,7 +8,6 @@ excerpt: "الدرجة الكلية في مؤشر الحرية الاقتصاد�
 category: development-gulf
 tags: ["مؤشر الحرية الاقتصادية", "دول مجلس التعاون", "قطر", "المؤسسات", "الاقتصاد الريعي", "بيئة الأعمال"]
 contentType: economic-report
-series: "مرصد ريادة الأعمال والمنشآت الصغيرة"
 issue: 4
 status: published
 peerReviewed: false

@@ -113,10 +113,9 @@ const articles = defineCollection({
     peerReviewed: z.boolean().default(false),
     /** Where a published version lives (journal, institution). Free text — never fabricate. */
     publishedIn: z.string().optional(),
-    /** A numbered series an item belongs to, e.g. an observatory issued in
-     *  instalments. `issue` also orders the reports index: a whole series can
-     *  share one publish month, and a date sort would then be arbitrary. */
-    series: z.string().optional(),
+    /** Issue number. Not displayed — it exists to order the reports index,
+     *  where a whole batch can share one publish month and a date sort would
+     *  then be arbitrary. */
     issue: z.number().int().positive().optional(),
     author: z.string().default('صلاح الدين مازن العجلة'),
     publishDate: z.coerce.date(),

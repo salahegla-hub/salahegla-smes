@@ -8,7 +8,6 @@ excerpt: "لا تنشر قطر في مسح النفاذ المالي رصيد ت
 category: sme-finance
 tags: ["تمويل المنشآت الصغيرة والمتوسطة", "قطر", "صندوق النقد الدولي", "مسح النفاذ المالي", "الشمول المالي", "الدول العربية"]
 contentType: economic-report
-series: "مرصد ريادة الأعمال والمنشآت الصغيرة"
 issue: 3
 status: published
 peerReviewed: false

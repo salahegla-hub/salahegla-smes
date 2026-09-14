@@ -10,9 +10,9 @@ export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { l
 const locale = Astro.params.locale as Locale;
 const t = useT(locale);
 
-/* A whole series can share one publish month, so the default date sort would
-   order these arbitrarily. Newest issue first, falling back to the date for
-   anything published outside a numbered series. */
+/* A batch of reports can share one publish month, so the default date sort
+   would order them arbitrarily. Newest issue first, falling back to the date
+   for anything published without an issue number. */
 const articles = (await getArticles(locale, { section: 'reports' })).sort((a, b) => {
   const ai = a.data.issue, bi = b.data.issue;
   if (ai != null && bi != null) return bi - ai;
@@ -25,7 +25,6 @@ const articles = (await getArticles(locale, { section: 'reports' })).sort((a, b)
    same pattern as the critical readings. */
 const hasItems = articles.length > 0;
 const usedCats = [...new Set(articles.map((a) => a.data.category))];
-const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean))] as string[];
 ---
 <Base locale={locale} title={t('reports.title')} description={t('reports.desc')} path="reports">
   <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.reports') }]} /></div>
@@ -45,9 +44,9 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
           locale === 'ar' ? (
             <div class="about__b">
               <p>
-                تقارير قصيرة تُصدر في سلاسل مرقّمة. كل تقرير يجمع بيانات منشورة متفرّقة — في أعداد
-                متعاقبة من تقرير رسمي، أو في قاعدة بيانات دولية — ويصلها في سلسلة واحدة متّصلة لا
-                يعرضها أي مصدر منفردًا، ثم يقرأ ما تكشفه.
+                تقارير قصيرة. كل تقرير يجمع بيانات منشورة متفرّقة — في أعداد متعاقبة من تقرير
+                رسمي، أو في قاعدة بيانات دولية — ويصلها في سلسلة واحدة متّصلة لا يعرضها أي مصدر
+                منفردًا، ثم يقرأ ما تكشفه.
               </p>
               <p>
                 كل رقم في هذه التقارير إمّا منشور في مصدره ومنسوب إليه، وإمّا محسوب بالقسمة من أرقام
@@ -62,10 +61,10 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
           ) : (
             <div class="about__b">
               <p>
-                Short reports issued in numbered series. Each one assembles published data that is
-                scattered across successive issues of an official report, or across an international
-                database, into a single continuous series no source presents on its own — and then
-                reads what that series shows.
+                Short reports. Each one assembles published data that is scattered across successive
+                issues of an official report, or across an international database, into a single
+                continuous series no source presents on its own — and then reads what that series
+                shows.
               </p>
               <p>
                 Every figure is either published in its source and attributed to it, or derived by
@@ -90,15 +89,6 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
                 <label for="q">{t('articles.searchLabel')}</label>
                 <input id="q" type="search" placeholder={t('articles.search')} autocomplete="off" />
               </div>
-              {usedSeries.length > 1 && (
-                <div class="field">
-                  <label for="series">{t('reports.series')}</label>
-                  <select id="series">
-                    <option value="">{t('articles.all')}</option>
-                    {usedSeries.map((s) => <option value={s}>{s}</option>)}
-                  </select>
-                </div>
-              )}
               <div class="field">
                 <label for="cat">{t('articles.filterCat')}</label>
                 <select id="cat">
@@ -116,7 +106,6 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
               {articles.map((a) => (
                 <div class="acell"
                      data-cat={a.data.category}
-                     data-series={a.data.series ?? ''}
                      data-text={`${a.data.title} ${a.data.subtitle ?? ''} ${a.data.excerpt} ${a.data.tags.join(' ')}`.toLowerCase()}>
                   <ArticleCard locale={locale} entry={a} />
                 </div>
@@ -174,7 +163,7 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
   .about__n a { color: var(--teal); font-weight: 600 }
 
   /* ---- filters (matches the research section) ---- */
-  .filters { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 14px; align-items: end; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; margin-block-end: 22px }
+  .filters { display: grid; grid-template-columns: 2fr 1fr auto; gap: 14px; align-items: end; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; margin-block-end: 22px }
   .filters .field { margin-block-end: 0 }
   .filters__reset { min-height: 48px; white-space: nowrap }
   .rescount { color: var(--text-3); font-size: .9rem; margin-block-end: 18px }
@@ -185,11 +174,9 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
 </style>
 
 <script>
-  /* Guarded: on a locale with no reports the filter markup is not rendered.
-     The series select only exists once more than one series is published. */
+  /* Guarded: on a locale with no reports the filter markup is not rendered. */
   const q = document.getElementById('q') as HTMLInputElement | null;
   const cat = document.getElementById('cat') as HTMLSelectElement | null;
-  const series = document.getElementById('series') as HTMLSelectElement | null;
   const reset = document.getElementById('reset') as HTMLButtonElement | null;
   const list = document.getElementById('alist');
   const empty = document.getElementById('empty') as HTMLElement | null;
@@ -204,8 +191,7 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
       cells.forEach((c) => {
         const ok =
           (!term || (c.dataset.text || '').includes(term)) &&
-          (!cat.value || c.dataset.cat === cat.value) &&
-          (!series || !series.value || c.dataset.series === series.value);
+          (!cat.value || c.dataset.cat === cat.value);
         c.hidden = !ok;
         if (ok) shown++;
       });
@@ -219,14 +205,8 @@ const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean
     const params = new URLSearchParams(location.search);
     if (params.get('cat')) cat.value = params.get('cat')!;
 
-    [q, cat, series].forEach((el) => el?.addEventListener('input', apply));
-    reset.addEventListener('click', () => {
-      q.value = '';
-      cat.value = '';
-      if (series) series.value = '';
-      apply();
-      q.focus();
-    });
+    [q, cat].forEach((el) => el.addEventListener('input', apply));
+    reset.addEventListener('click', () => { q.value = ''; cat.value = ''; apply(); q.focus(); });
     apply();
   }
 </script>

@@ -8,7 +8,6 @@ excerpt: "الاتجاهات الريادية في قطر مرتفعة ومست�
 category: sme-finance
 tags: ["ريادة الأعمال", "قطر", "المرصد العالمي لريادة الأعمال", "GEM", "المنشآت الصغيرة والمتوسطة"]
 contentType: economic-report
-series: "مرصد ريادة الأعمال والمنشآت الصغيرة"
 issue: 2
 status: published
 peerReviewed: false

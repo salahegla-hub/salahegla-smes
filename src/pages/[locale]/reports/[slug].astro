@@ -35,7 +35,7 @@ const [related, altSlug] = await Promise.all([
 
 /* Report, not ScholarlyArticle: these are data briefs built from published
    statistics, not peer-reviewed research, and the structured data should not
-   claim otherwise. `isPartOf` carries the series when there is one. */
+   claim otherwise. */
 const schema = [
   {
     '@type': 'Report',
@@ -49,13 +49,9 @@ const schema = [
     keywords: d.tags.join(', '),
     articleSection: CATEGORY_LABELS[d.category][locale],
     mainEntityOfPage: { '@type': 'WebPage', '@id': new URL(rel(locale, `reports/${d.slug}`), SITE.url).href },
-    ...(d.series ? { isPartOf: { '@type': 'PublicationIssue', name: d.series, ...(d.issue ? { issueNumber: d.issue } : {}) } } : {}),
+    ...(d.publishedIn ? { isPartOf: d.publishedIn } : {}),
   },
 ];
-
-const seriesLine = d.series
-  ? `${d.series}${d.issue ? ` · ${t('reports.issue')} ${String(d.issue).padStart(2, '0')}` : ''}`
-  : null;
 ---
 
 <Base
@@ -89,7 +85,7 @@ const seriesLine = d.series
             <span>{t('articles.updated')}: <time datetime={d.updatedDate.toISOString()}>{fmtDate(d.updatedDate, locale)}</time></span>
           )}
         </div>
-        {seriesLine && <p class="a-hero__where">{seriesLine}</p>}
+        {d.publishedIn && <p class="a-hero__where">{d.publishedIn}</p>}
       </div>
     </header>
 

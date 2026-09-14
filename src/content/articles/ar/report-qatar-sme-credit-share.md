@@ -8,7 +8,6 @@ excerpt: "بلغت حصة الشركات الصغيرة والمتوسطة من 
 category: sme-finance
 tags: ["تمويل المنشآت الصغيرة والمتوسطة", "قطر", "الائتمان المصرفي", "الاستراتيجية الوطنية الثالثة للتنمية", "بنك قطر للتنمية"]
 contentType: economic-report
-series: "مرصد تمويل الشركات الصغيرة والمتوسطة"
 issue: 1
 status: published
 peerReviewed: false

@@ -11,11 +11,8 @@ const href = soon ? null : (d.externalUrl ?? rel(locale, `${sectionOf(d.contentT
 const external = !soon && !!d.externalUrl;
 const Tag = href ? 'a' : 'div';
 const mins = readingTime(entry.body ?? '');
-/* One provenance line: the journal for a paper, the series and issue for a
-   report. A numbered series says more about where an item sits than a date. */
-const where =
-  d.publishedIn ??
-  (d.series ? `${d.series}${d.issue ? ` · ${t('reports.issue')} ${String(d.issue).padStart(2, '0')}` : ''}` : null);
+/* Provenance line: where a published version lives (journal, institution). */
+const where = d.publishedIn ?? null;
 ---
 <Tag class:list={['card acard', { 'is-soon': soon }]} href={href} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
   <!-- At most two badges. A grid of twenty cards each wearing three pills
