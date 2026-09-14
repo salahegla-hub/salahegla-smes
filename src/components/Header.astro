@@ -18,8 +18,12 @@ const nav = [
   { label: t('nav.home'), to: '' },
   { label: t('nav.about'), to: 'about' },
   { label: t('nav.research'), to: 'research' },
+  { label: t('nav.reports'), to: 'reports' },
   { label: t('nav.articles'), to: 'articles' },
-  { label: locale === 'ar' ? 'قراءات نقدية' : 'Critical readings', to: 'readings' },
+  /* "Readings" not "Critical readings": with seven items the English row no
+     longer fits the 1160px wrapper. The footer and the section H1 keep the
+     full name. */
+  { label: locale === 'ar' ? 'قراءات نقدية' : 'Readings', to: 'readings' },
   { label: t('nav.projects'), to: 'projects' },
 ] as const;
 
@@ -163,7 +167,7 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
     text-decoration: none;
     font-size: 0.94rem;
     font-weight: 500;
-    padding: 9px 13px;
+    padding: 9px 11px;
     border-radius: var(--r-sm);
     white-space: nowrap;
     position: relative;
@@ -179,7 +183,7 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
   .nav-d__l.is-active::after {
     content: '';
     position: absolute;
-    inset-inline: 13px;
+    inset-inline: 11px; /* matches .nav-d__l padding, so the rule sits under the label */
     inset-block-end: 2px;
     height: 2px;
     background: var(--gold);
@@ -298,9 +302,10 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
     justify-content: center;
   }
 
-  /* Six nav items fit beside the brand and CTA down to ~1080px; below that
-     the drawer takes over. */
-  @media (max-width: 1080px) {
+  /* Seven nav items now, one of them long ("التقارير الاقتصادية" /
+     "Economic Reports"), so the row needs more width than the six did before
+     the drawer takes over. Raised from 1080px. */
+  @media (max-width: 1240px) {
     .nav-d {
       display: none;
     }
@@ -345,6 +350,7 @@ const switchTitle = altPath === null ? t('articles.noTranslation') : LOCALE_NAME
       }
     });
     // Reset when resizing up to the desktop breakpoint
-    window.matchMedia('(min-width: 1081px)').addEventListener('change', (e) => e.matches && setOpen(false));
+    // Must stay in step with the drawer breakpoint in the styles above.
+    window.matchMedia('(min-width: 1241px)').addEventListener('change', (e) => e.matches && setOpen(false));
   }
 </script>

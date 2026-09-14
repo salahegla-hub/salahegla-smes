@@ -1,0 +1,192 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import TOC from '../../../components/TOC.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import Icon from '../../../components/Icon.astro';
+import Newsletter from '../../../components/Newsletter.astro';
+import '../../../styles/prose.css';
+import '../../../styles/article.css';
+import { useT, rel, fmtDate, readingTime, SITE, type Locale } from '../../../i18n/ui';
+import { CATEGORY_LABELS, TYPE_LABELS, sectionOf } from '../../../content.config';
+import { resolveRelatedArticles, translatedSlug } from '../../../lib/content';
+import { hasTOC } from '../../../lib/toc';
+
+export async function getStaticPaths() {
+  // "coming-soon" entries deliberately get no page — cards link nowhere (§8.4)
+  const all = await getCollection('articles', ({ data }) => data.status === 'published' && sectionOf(data.contentType) === 'reports');
+  return all.map((entry) => ({ params: { locale: entry.data.locale, slug: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const locale = entry.data.locale as Locale;
+const t = useT(locale);
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const mins = readingTime(entry.body ?? '');
+/* Decides the desktop grid: no contents, no side column (and no empty gutter). */
+const withTOC = hasTOC(headings);
+
+const [related, altSlug] = await Promise.all([
+  resolveRelatedArticles(d.relatedArticles, locale, d.translationKey),
+  translatedSlug('articles', d.translationKey, locale === 'ar' ? 'en' : 'ar'),
+]);
+
+/* Report, not ScholarlyArticle: these are data briefs built from published
+   statistics, not peer-reviewed research, and the structured data should not
+   claim otherwise. `isPartOf` carries the series when there is one. */
+const schema = [
+  {
+    '@type': 'Report',
+    headline: d.title,
+    description: d.excerpt,
+    inLanguage: locale,
+    datePublished: d.publishDate.toISOString(),
+    ...(d.updatedDate ? { dateModified: d.updatedDate.toISOString() } : {}),
+    author: { '@id': `${SITE.url}/#person` },
+    publisher: { '@id': `${SITE.url}/#person` },
+    keywords: d.tags.join(', '),
+    articleSection: CATEGORY_LABELS[d.category][locale],
+    mainEntityOfPage: { '@type': 'WebPage', '@id': new URL(rel(locale, `reports/${d.slug}`), SITE.url).href },
+    ...(d.series ? { isPartOf: { '@type': 'PublicationIssue', name: d.series, ...(d.issue ? { issueNumber: d.issue } : {}) } } : {}),
+  },
+];
+
+const seriesLine = d.series
+  ? `${d.series}${d.issue ? ` · ${t('reports.issue')} ${String(d.issue).padStart(2, '0')}` : ''}`
+  : null;
+---
+
+<Base
+  locale={locale}
+  title={`${d.seoTitle ?? d.title} — ${locale === 'ar' ? SITE.nameAr : SITE.nameEn}`}
+  description={d.seoDescription ?? d.excerpt}
+  path={`reports/${d.slug}`}
+  altPath={altSlug ? `reports/${altSlug}` : null}
+  canonical={d.canonicalUrl}
+  ogType="article"
+  schema={schema}
+>
+  <div class="wrap">
+    <Breadcrumbs locale={locale} items={[{ label: t('nav.reports'), href: rel(locale, 'reports') }, { label: d.title }]} />
+  </div>
+
+  <article>
+    <header class="a-hero">
+      <div class="wrap a-hero__in">
+        <div class="a-hero__tags">
+          <span class="pill pill--navy">{TYPE_LABELS[d.contentType][locale]}</span>
+          <a class="pill" href={`${rel(locale, 'reports')}?cat=${d.category}`}>{CATEGORY_LABELS[d.category][locale]}</a>
+        </div>
+        <h1>{d.title}</h1>
+        {d.subtitle && <p class="a-hero__sub">{d.subtitle}</p>}
+        <div class="meta a-hero__meta">
+          <span><Icon name="user" />{d.author}</span>
+          <span><Icon name="calendar" /><time datetime={d.publishDate.toISOString()}>{d.displayDate ?? fmtDate(d.publishDate, locale)}</time></span>
+          <span><Icon name="clock" />{mins} {t('articles.readingTime')}</span>
+          {d.updatedDate && (
+            <span>{t('articles.updated')}: <time datetime={d.updatedDate.toISOString()}>{fmtDate(d.updatedDate, locale)}</time></span>
+          )}
+        </div>
+        {seriesLine && <p class="a-hero__where">{seriesLine}</p>}
+      </div>
+    </header>
+
+    <div class="wrap a-body">
+      <!-- Standing note: what a figure in these reports is, and is not. -->
+      <aside class="a-note">
+        {
+          locale === 'ar'
+            ? 'تقرير مبني على بيانات منشورة. كل رقم إمّا منسوب إلى مصدره، وإمّا محسوب بالقسمة من أرقام منشورة وموسوم بأنه حساب الباحث. بحث مستقل لا يمثّل أي جهة، وليس توصية استثمارية.'
+            : 'A report built from published data. Every figure is either attributed to its source or derived by division from published figures and marked as the author\'s own calculation. Independent research representing no institution; not investment advice.'
+        }
+      </aside>
+
+      <div class="a-actions share">
+        {d.pdfUrl && (
+          <a class="btn btn--outline btn--sm" href={d.pdfUrl} download>
+            <Icon name="download" />
+            {d.pdfUrl.endsWith('.docx') ? (locale === 'ar' ? 'تحميل التقرير (Word)' : 'Download report (Word)') : t('articles.pdf')}
+          </a>
+        )}
+        <button type="button" class="btn btn--outline btn--sm" id="copy-link" data-copied={t('articles.copied')}>
+          <Icon name="link" />{t('articles.copyLink')}
+        </button>
+        <button type="button" class="btn btn--outline btn--sm" id="print-btn"><Icon name="print" />{t('articles.print')}</button>
+      </div>
+
+      <div class:list={['a-layout', { 'a-layout--toc': withTOC }]}>
+        {withTOC && (
+          <aside class="a-side"><TOC locale={locale} headings={headings} /></aside>
+        )}
+
+        <div class="a-main">
+          <div class="prose">
+            <Content />
+          </div>
+
+          {d.references.length > 0 && (
+            <section class="a-refs">
+              <h2>{t('articles.references')}</h2>
+              <ol>{d.references.map((r) => <li>{r}</li>)}</ol>
+            </section>
+          )}
+
+          {d.tags.length > 0 && (
+            <div class="a-tags">
+              {d.tags.map((tag) => <span class="pill pill--muted">{tag}</span>)}
+            </div>
+          )}
+
+          <p class="a-back">
+            <a class="btn btn--outline" href={rel(locale, 'reports')}>← {t('reports.backToAll')}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap a-foot">
+      {related.length > 0 && (
+        <section class="a-rel">
+          <h2>{t('articles.related')}</h2>
+          <div class="grid grid-3">{related.map((a) => <ArticleCard locale={locale} entry={a} />)}</div>
+        </section>
+      )}
+
+      <section class="a-rel article-cta">
+        <Newsletter locale={locale} />
+      </section>
+    </div>
+  </article>
+</Base>
+
+<style>
+  /* Only what a report adds to the shared article shell (article.css). */
+  .a-note {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-inline-start: 3px solid var(--teal);
+    border-radius: var(--r-sm);
+    padding: 14px 16px;
+    color: var(--text-3);
+    font-size: 0.9rem;
+    line-height: 1.85;
+    margin-block-end: 22px;
+  }
+</style>
+
+<script>
+  const copy = document.getElementById('copy-link');
+  copy?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      const old = copy.textContent;
+      copy.textContent = copy.getAttribute('data-copied');
+      setTimeout(() => (copy.textContent = old), 1800);
+    } catch {
+      /* clipboard unavailable — leave the button as-is */
+    }
+  });
+  document.getElementById('print-btn')?.addEventListener('click', () => window.print());
+</script>

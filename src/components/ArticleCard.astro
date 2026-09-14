@@ -11,6 +11,11 @@ const href = soon ? null : (d.externalUrl ?? rel(locale, `${sectionOf(d.contentT
 const external = !soon && !!d.externalUrl;
 const Tag = href ? 'a' : 'div';
 const mins = readingTime(entry.body ?? '');
+/* One provenance line: the journal for a paper, the series and issue for a
+   report. A numbered series says more about where an item sits than a date. */
+const where =
+  d.publishedIn ??
+  (d.series ? `${d.series}${d.issue ? ` · ${t('reports.issue')} ${String(d.issue).padStart(2, '0')}` : ''}` : null);
 ---
 <Tag class:list={['card acard', { 'is-soon': soon }]} href={href} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
   <!-- At most two badges. A grid of twenty cards each wearing three pills
@@ -34,7 +39,7 @@ const mins = readingTime(entry.body ?? '');
       {!soon && !d.externalUrl && <span>{mins} {t('articles.readingTime')}</span>}
     </div>
     {/* Skipped when the link is external — the CTA below already carries it. */}
-    {d.publishedIn && !d.peerReviewed && !external && <p class="acard__where">{d.publishedIn}</p>}
+    {where && !d.peerReviewed && !external && <p class="acard__where">{where}</p>}
     {soon
       ? <span class="acard__soon">{t('articles.comingSoonNote')}</span>
       : <span class="acard__go">{external ? (d.publishedIn ?? t('articles.readMore')) : t('articles.readMore')}

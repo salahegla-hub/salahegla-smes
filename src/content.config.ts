@@ -38,20 +38,24 @@ export const CONTENT_TYPES = [
   'case-study',
   'presentation',
   'critical-reading',
+  'economic-report',
 ] as const;
 
 
-/** Three public sections: research papers, articles, and critical readings.
- *  Derived from contentType so existing entries need no frontmatter change.
+/** Four public sections: research papers, articles, critical readings and
+ *  economic reports. Derived from contentType so existing entries need no
+ *  frontmatter change.
  *  NOTE: 'articles' stays the fallback, so any future type added without
  *  being listed below lands there rather than breaking the build. */
 export const RESEARCH_TYPES = ['research-paper', 'working-paper', 'policy-brief', 'economic-analysis', 'presentation'] as const;
 export const ARTICLE_TYPES = ['article', 'guide', 'case-study'] as const;
 export const READING_TYPES = ['critical-reading'] as const;
-export type Section = 'research' | 'articles' | 'readings';
+export const REPORT_TYPES = ['economic-report'] as const;
+export type Section = 'research' | 'articles' | 'readings' | 'reports';
 export const sectionOf = (t: string): Section => {
   if ((RESEARCH_TYPES as readonly string[]).includes(t)) return 'research';
   if ((READING_TYPES as readonly string[]).includes(t)) return 'readings';
+  if ((REPORT_TYPES as readonly string[]).includes(t)) return 'reports';
   return 'articles';
 };
 
@@ -79,6 +83,7 @@ export const TYPE_LABELS: Record<(typeof CONTENT_TYPES)[number], { ar: string; e
   'case-study': { ar: 'دراسة حالة', en: 'Case Study' },
   presentation: { ar: 'عرض تقديمي', en: 'Presentation' },
   'critical-reading': { ar: 'قراءة نقدية', en: 'Critical Reading' },
+  'economic-report': { ar: 'تقرير اقتصادي', en: 'Economic Report' },
 };
 
 /** Optional badge shown on a card, e.g. peer-reviewed. Only set when true. */
@@ -108,6 +113,11 @@ const articles = defineCollection({
     peerReviewed: z.boolean().default(false),
     /** Where a published version lives (journal, institution). Free text — never fabricate. */
     publishedIn: z.string().optional(),
+    /** A numbered series an item belongs to, e.g. an observatory issued in
+     *  instalments. `issue` also orders the reports index: a whole series can
+     *  share one publish month, and a date sort would then be arbitrary. */
+    series: z.string().optional(),
+    issue: z.number().int().positive().optional(),
     author: z.string().default('صلاح الدين مازن العجلة'),
     publishDate: z.coerce.date(),
     /** Shown instead of the formatted date when only the year is known —

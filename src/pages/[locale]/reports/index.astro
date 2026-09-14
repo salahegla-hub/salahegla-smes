@@ -1,0 +1,232 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { useT, rel, LOCALES, type Locale } from '../../../i18n/ui';
+import { CATEGORY_LABELS } from '../../../content.config';
+import { getArticles } from '../../../lib/content';
+
+export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = useT(locale);
+
+/* A whole series can share one publish month, so the default date sort would
+   order these arbitrarily. Newest issue first, falling back to the date for
+   anything published outside a numbered series. */
+const articles = (await getArticles(locale, { section: 'reports' })).sort((a, b) => {
+  const ai = a.data.issue, bi = b.data.issue;
+  if (ai != null && bi != null) return bi - ai;
+  if (ai != null || bi != null) return ai != null ? -1 : 1;
+  return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
+});
+
+/* Reports are published in Arabic only for now. Rather than 404 the English
+   route (the nav is shared across locales), render a short pointer instead —
+   same pattern as the critical readings. */
+const hasItems = articles.length > 0;
+const usedCats = [...new Set(articles.map((a) => a.data.category))];
+const usedSeries = [...new Set(articles.map((a) => a.data.series).filter(Boolean))] as string[];
+---
+<Base locale={locale} title={t('reports.title')} description={t('reports.desc')} path="reports">
+  <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.reports') }]} /></div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="shead">
+        <span class="shead__eyebrow">{t('nav.reports')}</span>
+        <h1>{t('reports.h1')}</h1>
+        <p>{t('reports.intro')}</p>
+      </div>
+
+      <!-- Section framing: says plainly what these are, and what they are not. -->
+      <div class="about">
+        <h2 class="about__h">{locale === 'ar' ? 'عن هذا القسم' : 'About this section'}</h2>
+        {
+          locale === 'ar' ? (
+            <div class="about__b">
+              <p>
+                تقارير قصيرة تُصدر في سلاسل مرقّمة. كل تقرير يجمع بيانات منشورة متفرّقة — في أعداد
+                متعاقبة من تقرير رسمي، أو في قاعدة بيانات دولية — ويصلها في سلسلة واحدة متّصلة لا
+                يعرضها أي مصدر منفردًا، ثم يقرأ ما تكشفه.
+              </p>
+              <p>
+                كل رقم في هذه التقارير إمّا منشور في مصدره ومنسوب إليه، وإمّا محسوب بالقسمة من أرقام
+                منشورة وموسوم صراحةً بأنه «حساب الباحث». وهي بحث مستقل لا يمثّل أي جهة، وليست منتجًا
+                رسميًا لأي من الجهات المذكورة في مصادرها، وليست توصية استثمارية.
+              </p>
+              <p class="about__n">
+                للأعمال البحثية الأكاديمية، انظر <a href={rel(locale, 'research')}>قسم الأوراق البحثية</a>؛
+                وللتحليلات المستقلة، انظر <a href={rel(locale, 'articles')}>قسم المقالات</a>.
+              </p>
+            </div>
+          ) : (
+            <div class="about__b">
+              <p>
+                Short reports issued in numbered series. Each one assembles published data that is
+                scattered across successive issues of an official report, or across an international
+                database, into a single continuous series no source presents on its own — and then
+                reads what that series shows.
+              </p>
+              <p>
+                Every figure is either published in its source and attributed to it, or derived by
+                division from published figures and explicitly marked as the author's own
+                calculation. This is independent research representing no institution, it is not an
+                official product of any body named in the sources, and it is not investment advice.
+              </p>
+              <p class="about__n">
+                For academic research, see the <a href={rel(locale, 'research')}>research papers</a>;
+                for standalone analysis, see the <a href={rel(locale, 'articles')}>articles</a>.
+              </p>
+            </div>
+          )
+        }
+      </div>
+
+      {
+        hasItems ? (
+          <Fragment>
+            <div class="filters" role="search">
+              <div class="field filters__search">
+                <label for="q">{t('articles.searchLabel')}</label>
+                <input id="q" type="search" placeholder={t('articles.search')} autocomplete="off" />
+              </div>
+              {usedSeries.length > 1 && (
+                <div class="field">
+                  <label for="series">{t('reports.series')}</label>
+                  <select id="series">
+                    <option value="">{t('articles.all')}</option>
+                    {usedSeries.map((s) => <option value={s}>{s}</option>)}
+                  </select>
+                </div>
+              )}
+              <div class="field">
+                <label for="cat">{t('articles.filterCat')}</label>
+                <select id="cat">
+                  <option value="">{t('articles.all')}</option>
+                  {usedCats.map((c) => <option value={c}>{CATEGORY_LABELS[c][locale]}</option>)}
+                </select>
+              </div>
+              <button type="button" id="reset" class="btn btn--outline filters__reset">{t('articles.reset')}</button>
+            </div>
+
+            <p class="rescount" role="status" aria-live="polite"
+               data-one={t('articles.results')} data-many={t('articles.resultsPlural')}></p>
+
+            <div class="grid grid-3" id="alist">
+              {articles.map((a) => (
+                <div class="acell"
+                     data-cat={a.data.category}
+                     data-series={a.data.series ?? ''}
+                     data-text={`${a.data.title} ${a.data.subtitle ?? ''} ${a.data.excerpt} ${a.data.tags.join(' ')}`.toLowerCase()}>
+                  <ArticleCard locale={locale} entry={a} />
+                </div>
+              ))}
+            </div>
+
+            <div class="empty" id="empty" hidden>
+              <strong>{t('reports.empty')}</strong>
+              <span>{t('articles.emptyHint')}</span>
+            </div>
+          </Fragment>
+        ) : (
+          <div class="empty">
+            <strong>
+              {locale === 'ar' ? 'لا توجد تقارير منشورة بعد' : 'These reports are published in Arabic'}
+            </strong>
+            <span>
+              {locale === 'ar'
+                ? 'سيُنشر هذا القسم قريبًا.'
+                : 'The economic reports are currently available in Arabic only.'}
+            </span>
+            {locale === 'en' && (
+              <p><a class="btn btn--outline" href="/ar/reports">اقرأها بالعربية</a></p>
+            )}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---- section framing panel (matches the critical readings section) ---- */
+  .about {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-inline-start: 3px solid var(--teal);
+    border-radius: var(--r);
+    padding: clamp(18px, 2.6vw, 26px);
+    margin-block-end: 22px;
+  }
+  .about__h {
+    font-size: 1.05rem;
+    margin: 0 0 10px;
+  }
+  .about__b p {
+    color: var(--text-3);
+    font-size: 0.95rem;
+    line-height: 1.9;
+    margin: 0 0 10px;
+    max-width: 78ch;
+  }
+  .about__b p:last-child { margin-block-end: 0 }
+  .about__n { font-size: 0.9rem }
+  .about__n a { color: var(--teal); font-weight: 600 }
+
+  /* ---- filters (matches the research section) ---- */
+  .filters { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 14px; align-items: end; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; margin-block-end: 22px }
+  .filters .field { margin-block-end: 0 }
+  .filters__reset { min-height: 48px; white-space: nowrap }
+  .rescount { color: var(--text-3); font-size: .9rem; margin-block-end: 18px }
+  .acell { display: contents }
+  .acell[hidden] { display: none }
+  @media (max-width: 860px) { .filters { grid-template-columns: 1fr 1fr } .filters__search { grid-column: 1 / -1 } .filters__reset { grid-column: 1 / -1 } }
+  @media (max-width: 520px) { .filters { grid-template-columns: 1fr } }
+</style>
+
+<script>
+  /* Guarded: on a locale with no reports the filter markup is not rendered.
+     The series select only exists once more than one series is published. */
+  const q = document.getElementById('q') as HTMLInputElement | null;
+  const cat = document.getElementById('cat') as HTMLSelectElement | null;
+  const series = document.getElementById('series') as HTMLSelectElement | null;
+  const reset = document.getElementById('reset') as HTMLButtonElement | null;
+  const list = document.getElementById('alist');
+  const empty = document.getElementById('empty') as HTMLElement | null;
+  const count = document.querySelector('.rescount') as HTMLElement | null;
+
+  if (q && cat && reset && list && empty && count) {
+    const cells = Array.from(list.querySelectorAll<HTMLElement>('.acell'));
+
+    const apply = () => {
+      const term = q.value.trim().toLowerCase();
+      let shown = 0;
+      cells.forEach((c) => {
+        const ok =
+          (!term || (c.dataset.text || '').includes(term)) &&
+          (!cat.value || c.dataset.cat === cat.value) &&
+          (!series || !series.value || c.dataset.series === series.value);
+        c.hidden = !ok;
+        if (ok) shown++;
+      });
+      empty.hidden = shown !== 0;
+      count.textContent = `${shown} ${shown === 1 ? count.dataset.one : count.dataset.many}`;
+      const url = new URL(location.href);
+      cat.value ? url.searchParams.set('cat', cat.value) : url.searchParams.delete('cat');
+      history.replaceState(null, '', url);
+    };
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('cat')) cat.value = params.get('cat')!;
+
+    [q, cat, series].forEach((el) => el?.addEventListener('input', apply));
+    reset.addEventListener('click', () => {
+      q.value = '';
+      cat.value = '';
+      if (series) series.value = '';
+      apply();
+      q.focus();
+    });
+    apply();
+  }
+</script>
