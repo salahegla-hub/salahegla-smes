@@ -1,0 +1,28 @@
+# Build output — Netlify runs `npm run build` itself, so dist/ is never committed.
+dist/
+# Astro's generated content types (regenerated on every dev/build run).
+.astro/
+.netlify/
+
+# Dependencies — restored from package-lock.json with `npm install`.
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Secrets — never commit a real key. Keep .env.example tracked if one is added.
+.env
+.env.*
+!.env.example
+
+# OS / editor noise. This project lives in a OneDrive folder on Windows,
+# which drops desktop.ini and Thumbs.db into synced directories.
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
