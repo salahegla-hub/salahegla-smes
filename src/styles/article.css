@@ -1,0 +1,145 @@
+/* ============================================================
+   The article shell — hero, body, contents column, footer.
+   Shared by every section that renders one long piece:
+   research, articles, readings and reports.
+
+   This lived in each page's <style> block until there were four
+   copies of it. Sections differ in their content model, not in how
+   a page of prose is laid out, so the shell belongs in one file and
+   a page keeps only what is genuinely its own (the reviewed-work
+   citation on a critical reading, for example).
+   ============================================================ */
+
+.a-hero {
+  background: var(--navy);
+  color: #D3DCE5;
+  padding-block: clamp(30px, 4vw, 50px);
+}
+.a-hero__in {
+  max-width: var(--article);
+}
+.a-hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-block-end: 16px;
+}
+.a-hero__tags .pill {
+  text-decoration: none;
+}
+.a-hero h1 {
+  color: #fff;
+  font-size: clamp(24px, 1.5vw + 20px, 36px);
+  line-height: 1.4;
+}
+.a-hero__sub {
+  color: var(--gold);
+  font-size: clamp(1rem, 0.4vw + 0.95rem, 1.18rem);
+  font-weight: 500;
+  margin-block-start: 12px;
+  line-height: 1.65;
+}
+.a-hero__meta {
+  margin-block-start: 20px;
+  color: #A4B3C1;
+}
+.a-hero__meta svg {
+  stroke: var(--gold);
+}
+/* Where a published version lives — journal, institution, series. */
+.a-hero__where {
+  margin-block-start: 12px;
+  color: #A4B3C1;
+  font-size: 0.9rem;
+}
+
+.a-body {
+  max-width: var(--article);
+  padding-block: clamp(28px, 4vw, 42px);
+}
+.a-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-block-end: 26px;
+}
+.btn--sm {
+  min-height: 42px;
+  padding: 8px 16px;
+  font-size: 0.88rem;
+}
+.a-refs {
+  margin-block-start: 44px;
+  padding-block-start: 24px;
+  border-block-start: 1px solid var(--line);
+}
+.a-refs h2 {
+  font-size: 1.1rem;
+  margin-block-end: 12px;
+}
+.a-refs ol {
+  padding-inline-start: 1.3em;
+  color: var(--text-3);
+  font-size: 0.92rem;
+}
+.a-refs li {
+  margin-block-end: 0.6em;
+}
+.a-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-block-start: 32px;
+}
+.a-back {
+  margin-block-start: 32px;
+}
+.a-foot {
+  padding-block-end: clamp(40px, 6vw, 70px);
+}
+.a-rel {
+  margin-block-start: 46px;
+}
+.a-rel h2 {
+  margin-block-end: 18px;
+}
+
+/* ---- desktop: the contents move into a sticky side column ----
+   A long piece earns a list that travels with the reader. Widening the hero
+   by the same amount keeps the headline and the text column on one start
+   edge. Below 1100px none of this applies and the TOC stays exactly where it
+   was — a box above the text. */
+@media (min-width: 1100px) {
+  .a-hero__in,
+  .a-body {
+    max-width: calc(var(--article) + var(--toc-col) + var(--toc-gap));
+  }
+  .a-hero h1 {
+    max-width: 26ch;
+  }
+  .a-hero__sub {
+    max-width: 58ch;
+  }
+  .a-layout--toc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--toc-col);
+    gap: var(--toc-gap);
+    align-items: start;
+  }
+  /* Explicit placement: the aside leads in the DOM so it keeps its reading
+     order on mobile and for screen readers, but sits in the outer column. */
+  .a-layout--toc > .a-main {
+    grid-area: 1 / 1;
+  }
+  .a-layout--toc > .a-side {
+    grid-area: 1 / 2;
+    position: sticky;
+    inset-block-start: var(--sticky-top);
+    max-height: calc(100vh - var(--sticky-top) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .a-side .toc {
+    margin-block-end: 0;
+  }
+}
