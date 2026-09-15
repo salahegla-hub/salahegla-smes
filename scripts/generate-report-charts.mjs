@@ -125,7 +125,12 @@ function bars(cfg) {
     const fill = isRef ? C.muted : isHi ? C.navy : C.teal;
     s += txt(L - 12, cy + 4, r.label, { size: 12.5, anchor: 'end', fill: isRef ? C.muted : C.ink, weight: isRef || isHi ? 600 : 400 });
     s += `<rect x="${L}" y="${(cy - 9).toFixed(1)}" width="${bw.toFixed(1)}" height="18" rx="4" fill="${fill}"${isRef ? ' opacity="0.42"' : ''}/>`;
-    s += txt(L + bw + 8, cy + 4, Number(r.value).toFixed(decimals) + unit + (r.mark || ''), { size: 12, anchor: 'start', fill: C.ink, weight: 600 });
+    /* A row may override the figure's precision — a published round thousand
+       should read "20,000", not "20000.0", beside neighbours given to a
+       decimal place. Thousands separators throughout. */
+    const [whole, frac] = Number(r.value).toFixed(r.decimals ?? decimals).split('.');
+    const shown = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (frac ? '.' + frac : '');
+    s += txt(L + bw + 8, cy + 4, shown + unit + (r.mark || ''), { size: 12, anchor: 'start', fill: C.ink, weight: 600 });
   });
   s += `<line x1="${L}" y1="${T - 6}" x2="${L}" y2="${T + rows.length * rowH}" stroke="${C.axis}" stroke-width="1"/>`;
   if (note) s += txt(W - 8, H - 8, note, { size: 10.5, anchor: 'end' });
@@ -287,6 +292,34 @@ const figures = {
       { label: 'سلطنة عُمان', value: 49.7 }, { label: 'المتوسط العالمي', value: 48.4 },
       { label: 'السعودية', value: 47.4 }, { label: 'البحرين', value: 45.6 },
       { label: 'الكويت', value: 44.4 },
+    ],
+  }),
+  'r05-nmoq-layers': bars({
+    title: 'توزيع القيمة المضافة السنوية للمتحف الوطني على الطبقات الأربع (مليون ريال)',
+    desc: 'الطبقتان السياحية والمباشرة متقاربتان وتحكمان النتيجة، والمستحثّة لا تتجاوز 7٪.',
+    decimals: 1,
+    rows: [
+      { label: 'السياحية', value: 112.4, mark: '  (38.6٪)' },
+      { label: 'المباشرة', value: 109.5, mark: '  (37.6٪)' },
+      { label: 'غير المباشرة', value: 48.6, mark: '  (16.7٪)' },
+      { label: 'المستحثّة', value: 20.7, mark: '  (7.1٪)' },
+    ],
+  }),
+  /* Deliberately one linear scale. The four measured definitions collapsing to
+     slivers beside the circulated figure IS the report's argument; a log axis
+     would hide exactly what the reader is meant to see. */
+  'r06-cci-definitions': bars({
+    title: 'قيمة الإنتاج وفق خمسة تعريفات للصناعات الثقافية والإبداعية، 2020 (مليون ريال)',
+    desc: 'بين أوسع تعريف رسمي (1,258.3) والرقم المتداول (20,000) فارق قدره 15.9 ضعفًا.',
+    decimals: 1,
+    highlight: 'د5 · التعريف المتداول',
+    note: 'المقياس خطّي واحد: ضآلة الأشرطة الأربعة الأولى هي موضوع الشكل',
+    rows: [
+      { label: 'د5 · التعريف المتداول', value: 20000, decimals: 0 },
+      { label: 'د4 · سقف الأكواد المقيسة', value: 1258.3 },
+      { label: 'د3 · النواة + السمعبصري', value: 406.4 },
+      { label: 'د2 · النواة الثقافية المقيسة', value: 325.9 },
+      { label: 'د1 · النواة المتحفية', value: 272.9 },
     ],
   }),
 };
