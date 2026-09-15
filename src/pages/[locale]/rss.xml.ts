@@ -24,7 +24,7 @@ export async function GET(context: APIContext) {
   return rss({
     title:
       locale === 'ar'
-        ? `${SITE.nameAr} — الأبحاث والمقالات`
+        ? `${SITE.nameAr} · الأبحاث والمقالات`
         : `${SITE.nameEn} — Research & Articles`,
     description:
       locale === 'ar'

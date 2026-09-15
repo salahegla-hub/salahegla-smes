@@ -11,7 +11,7 @@ const t = useT(locale);
 const L = (b: { ar: string; en: string }) => b[locale];
 const name = locale === 'ar' ? SITE.nameAr : SITE.nameEn;
 ---
-<Base locale={locale} title={`${t('about.title')} — ${name}`} description={t('about.desc')} path="about" ogType="profile">
+<Base locale={locale} title={`${t('about.title')} · ${name}`} description={t('about.desc')} path="about" ogType="profile">
   <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.about') }]} /></div>
 
   <section class="section ab-hero">
@@ -107,7 +107,7 @@ const name = locale === 'ar' ? SITE.nameAr : SITE.nameEn;
       </ul>
       <h3 class="ab-sub">{t('about.working')} <span class="pill pill--muted ltr">{WORKING_PAPERS.length}</span></h3>
       <ul class="pub">
-        {WORKING_PAPERS.map((p) => <li><strong>{L(p.title)}</strong><span>{locale === 'ar' ? 'معهد الدوحة للدراسات العليا' : 'Doha Institute for Graduate Studies'} — {L(p.date)}</span></li>)}
+        {WORKING_PAPERS.map((p) => <li><strong>{L(p.title)}</strong><span>{locale === 'ar' ? 'معهد الدوحة للدراسات العليا' : 'Doha Institute for Graduate Studies'} · {L(p.date)}</span></li>)}
       </ul>
     </div>
   </section>

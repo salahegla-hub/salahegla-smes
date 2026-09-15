@@ -76,7 +76,7 @@ const schema = [
 
 <Base
   locale={locale}
-  title={`${d.seoTitle ?? d.title} — ${locale === 'ar' ? SITE.nameAr : SITE.nameEn}`}
+  title={`${d.seoTitle ?? d.title} · ${locale === 'ar' ? SITE.nameAr : SITE.nameEn}`}
   description={d.seoDescription ?? d.excerpt}
   path={`readings/${d.slug}`}
   altPath={altSlug ? `readings/${altSlug}` : null}

@@ -10,7 +10,7 @@ contentType: "economic-analysis"
 status: "published"
 peerReviewed: false
 featured: true
-publishedIn: "المركز العربي للأبحاث ودراسة السياسات — سلسلة «تحليلات اقتصادية»"
+publishedIn: "المركز العربي للأبحاث ودراسة السياسات، سلسلة «تحليلات اقتصادية»"
 author: "صلاح الدين مازن العجلة"
 publishDate: 2026-08-11
 pdfUrl: "/files/hormuz-2026-insurance-gulf-security.pdf"

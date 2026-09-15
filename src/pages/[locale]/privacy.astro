@@ -9,7 +9,7 @@ const locale = Astro.params.locale as Locale;
 const t = useT(locale);
 const ar = locale === 'ar';
 ---
-<Base locale={locale} title={`${t('privacy.title')} — ${ar ? SITE.nameAr : SITE.nameEn}`} description={ar ? 'كيف تُجمع بياناتك وتُستخدم على هذا الموقع.' : 'How your data is collected and used on this site.'} path="privacy">
+<Base locale={locale} title={`${t('privacy.title')} · ${ar ? SITE.nameAr : SITE.nameEn}`} description={ar ? 'كيف تُجمع بياناتك وتُستخدم على هذا الموقع.' : 'How your data is collected and used on this site.'} path="privacy">
   <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('privacy.title') }]} /></div>
   <section class="section">
     <div class="wrap">

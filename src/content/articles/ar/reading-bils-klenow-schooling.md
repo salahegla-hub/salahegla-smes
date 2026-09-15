@@ -1,5 +1,5 @@
 ---
-title: "قراءة في: Does Schooling Cause Growth? — هل التعليم يسبب النمو أم العكس؟"
+title: "قراءة في: Does Schooling Cause Growth? (هل التعليم يسبب النمو أم العكس؟)"
 subtitle: "بيلز وكلينو: ثلث العلاقة فقط يفسّرها التعليم، والباقي قد يكون سببية عكسية"
 slug: "reading-bils-klenow-schooling-growth"
 locale: ar

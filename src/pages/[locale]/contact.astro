@@ -9,7 +9,7 @@ export function getStaticPaths() { return LOCALES.map((locale) => ({ params: { l
 const locale = Astro.params.locale as Locale;
 const t = useT(locale);
 ---
-<Base locale={locale} title={`${t('contact.title')} — ${locale === 'ar' ? SITE.nameAr : SITE.nameEn}`} description={t('contact.desc')} path="contact">
+<Base locale={locale} title={`${t('contact.title')} · ${locale === 'ar' ? SITE.nameAr : SITE.nameEn}`} description={t('contact.desc')} path="contact">
   <div class="wrap"><Breadcrumbs locale={locale} items={[{ label: t('nav.contact') }]} /></div>
 
   <section class="section">
