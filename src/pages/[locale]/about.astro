@@ -21,8 +21,7 @@ const name = locale === 'ar' ? SITE.nameAr : SITE.nameEn;
         <h1>{name}</h1>
         <p class="lead ab-bio">{L(BIO)}</p>
         <div class="ab-links">
-          <a class="btn btn--gold" href="/files/Salaheldeen-Ijla-CV.pdf" download><Icon name="download" />{t('cv.download')}</a>
-          <a class="btn btn--primary" href={rel(locale, 'contact')}>{t('nav.cta')}</a>
+          <a class="btn btn--gold" href={rel(locale, 'contact')}>{t('nav.cta')}</a>
           <a class="btn btn--outline ltr" href={SITE.linkedin} target="_blank" rel="noopener noreferrer"><Icon name="linkedin" />LinkedIn</a>
         </div>
       </div>

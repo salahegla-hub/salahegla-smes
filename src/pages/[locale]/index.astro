@@ -233,20 +233,9 @@ const featuredHref = featured
     </div>
   </section>
 
-  <!-- ===================== CV + NEWSLETTER ===================== -->
+  <!-- ===================== NEWSLETTER ===================== -->
   <section class="section">
-    <div class="wrap grid grid-2">
-      <div class="card cv">
-        <span class="cv__ic"><Icon name="download" /></span>
-        <div>
-          <h3>{t('home.cv.h')}</h3>
-          <p>{t('home.cv.p')}</p>
-          <div class="cv__btns">
-            <a class="btn btn--primary" href="/files/Salaheldeen-Ijla-CV.pdf" download>{t('cv.download')}</a>
-            <a class="btn btn--outline" href={rel(locale, 'about')}>{locale === 'ar' ? 'اعرف المزيد عني' : 'More about me'}</a>
-          </div>
-        </div>
-      </div>
+    <div class="wrap">
       <Newsletter locale={locale} />
     </div>
   </section>
@@ -485,39 +474,6 @@ const featuredHref = featured
   }
 
   /* ---- cv ---- */
-  .cv {
-    flex-direction: row;
-    gap: 20px;
-    align-items: flex-start;
-  }
-  .cv__ic {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-    background: var(--teal-tint);
-    display: grid;
-    place-items: center;
-    flex: none;
-  }
-  .cv__ic :global(svg) {
-    width: 25px;
-    height: 25px;
-    stroke: var(--teal);
-  }
-  .cv h3 {
-    margin-block-end: 5px;
-  }
-  .cv p {
-    color: var(--text-3);
-    font-size: 0.94rem;
-    margin-block-end: 14px;
-  }
-  .cv__btns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
   @media (max-width: 900px) {
     .hero__in {
       grid-template-columns: 1fr;
@@ -540,7 +496,6 @@ const featuredHref = featured
     }
   }
   @media (max-width: 560px) {
-    .cv,
     .xcard {
       flex-direction: column;
     }
